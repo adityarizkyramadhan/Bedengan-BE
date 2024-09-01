@@ -5,6 +5,11 @@ definitions:
       city:
         description: Kota tempat tinggal user
         type: string
+      email:
+        description: Email bersifat unik dan tidak boleh kosong
+        type: string
+      id:
+        type: string
       name:
         description: Name tidak boleh kosong
         type: string
@@ -76,14 +81,14 @@ definitions:
           Example: "success"
         type: string
     type: object
-host: devel0-filkom.ub.ac.id
+host: api.perkemahanbedengan.com
 info:
   contact:
     email: adityarizky1020@gmail.com
     name: Aditya Rizky Ramadhan
   description: |-
     This is API documentation for Islamind. You can use the API with the following hosts:
-    - Production: `devel0-filkom.ub.ac.id`
+    - Production: `api.perkemahanbedengan.com`
   title: Islamind API
   version: "1.0"
 paths:
@@ -193,6 +198,40 @@ paths:
           schema:
             $ref: '#/definitions/utils.ErrorResponseData'
       summary: Login user
+      tags:
+      - User
+  /user/logout:
+    get:
+      consumes:
+      - application/json
+      description: Logout user
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Logout user
       tags:
       - User
   /user/register:

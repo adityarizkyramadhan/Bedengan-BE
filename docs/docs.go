@@ -195,6 +195,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/logout": {
+            "get": {
+                "description": "Logout user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Logout user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            }
+        },
         "/user/register": {
             "post": {
                 "description": "Register new user",
@@ -374,6 +430,13 @@ const docTemplate = `{
                     "description": "Kota tempat tinggal user",
                     "type": "string"
                 },
+                "email": {
+                    "description": "Email bersifat unik dan tidak boleh kosong",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
                 "name": {
                     "description": "Name tidak boleh kosong",
                     "type": "string"
@@ -478,11 +541,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "devel0-filkom.ub.ac.id",
+	Host:             "api.perkemahanbedengan.com",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Islamind API",
-	Description:      "This is API documentation for Islamind. You can use the API with the following hosts:\n- Production: `devel0-filkom.ub.ac.id`",
+	Description:      "This is API documentation for Islamind. You can use the API with the following hosts:\n- Production: `api.perkemahanbedengan.com`",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
