@@ -1,9 +1,10 @@
 package model
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"gorm.io/gorm"
-	"time"
 )
 
 // User represents a user model.
@@ -36,12 +37,6 @@ type User struct {
 
 func (u User) TableName() string {
 	return "users"
-}
-
-func (u *User) BeforeCreate() (err error) {
-	// Generate id dengan versi 6
-	u.ID = uuid.New()
-	return
 }
 
 type UserCreate struct {
