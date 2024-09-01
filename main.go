@@ -27,13 +27,12 @@ import (
 // @title           Islamind API
 // @version         1.0
 // @description     This is API documentation for Islamind. You can use the API with the following hosts:
-// @description     - Production: `devel0-filkom.ub.ac.id`
+// @description     - Production: `api.perkemahanbedengan.com`
 // @contact.name    Aditya Rizky Ramadhan
 // @contact.email   adityarizky1020@gmail.com
-// @host            devel0-filkom.ub.ac.id
+// @host            api.perkemahanbedengan.com
 // @BasePath        /api/v1
-// @Server localhost:3000 Local server
-// @Server devel0-filkom.ub.ac.id Production server
+// @Server api.perkemahanbedengan.com Production server
 func main() {
 
 	err := godotenv.Load()
@@ -113,7 +112,7 @@ func main() {
 			log.Fatalf("listen: %s\n", err)
 		}
 	}()
-	log.Println("Server started at :3000")
+	log.Printf("Server started on port %s\n", os.Getenv("PORT"))
 
 	// Wait for interrupt signal to gracefully shutdown the server
 	quit := make(chan os.Signal, 1)
