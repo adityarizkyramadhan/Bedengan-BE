@@ -10,9 +10,9 @@ import (
 func CheckToken(redis *redis.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Authorization")
+		// Jika kosong maka izinkan request namun jika ada dan sudah logout maka tolak
 		if token == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is required"})
-			c.Abort()
+			c.Next()
 			return
 		}
 
