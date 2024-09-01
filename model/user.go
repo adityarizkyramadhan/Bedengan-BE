@@ -10,9 +10,9 @@ import (
 // User represents a user model.
 // swagger:model User
 type User struct {
-	ID uuid.UUID `json:"-" gorm:"type:uuid;primary_key"`
+	ID uuid.UUID `json:"id" gorm:"type:char(36);primary_key"`
 	// Email bersifat unik dan tidak boleh kosong
-	Email string `json:"-" gorm:"type:varchar(255);unique;not null"`
+	Email string `json:"email" gorm:"type:varchar(255);unique;not null"`
 	// Name tidak boleh kosong
 	Name string `json:"name" gorm:"type:varchar(255);not null"`
 	// Role merupakan enum yang berisi "admin" dan "user" dan not null
@@ -22,17 +22,17 @@ type User struct {
 	// OTP digunakan untuk konfirmasi email
 	OTP string `json:"-" gorm:"type:varchar(5)"`
 	// IsVerified menandakan apakah email sudah diverifikasi
-	IsVerified bool `json:"-" gorm:"type:boolean;default:false"`
+	IsVerified bool `json:"-" gorm:"type:tinyint(1);default:0"`
 	// Provinsi tempat tinggal user
 	Province string `json:"province" gorm:"type:varchar(255)"`
 	// Kota tempat tinggal user
 	City string `json:"city" gorm:"type:varchar(255)"`
 	// CreatedAt menandakan waktu user dibuat
-	CreatedAt time.Time `json:"-" gorm:"type:timestamp without time zone;default:now()"`
+	CreatedAt time.Time `json:"-" gorm:"type:timestamp;default:CURRENT_TIMESTAMP"`
 	// UpdatedAt menandakan waktu user terakhir diupdate
-	UpdatedAt time.Time `json:"-" gorm:"type:timestamp without time zone;default:now()"`
+	UpdatedAt time.Time `json:"-" gorm:"type:timestamp;default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"`
 	// DeletedAt menandakan waktu user dihapus
-	DeletedAt gorm.DeletedAt `json:"-" gorm:"type:timestamp without time zone"`
+	DeletedAt gorm.DeletedAt `json:"-" gorm:"type:timestamp"`
 }
 
 func (u User) TableName() string {
