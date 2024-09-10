@@ -100,6 +100,11 @@ func main() {
 	userRoutes := routes.NewUserRoutes(userController)
 	userRoutes.SetupRoutes(v1)
 
+	repoPerlengkapan := repositories.NewPerlengkapanRepository(db)
+	perlengkapanController := controller.NewPerlengkapanController(repoPerlengkapan)
+	perlengkapanRoutes := routes.NewPerlengkapanRoutes(perlengkapanController)
+	perlengkapanRoutes.SetupRoutes(v1)
+
 	// Setup server with context for graceful shutdown
 	srv := &http.Server{
 		Addr:    os.Getenv("PORT"),
