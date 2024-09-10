@@ -1,5 +1,21 @@
 basePath: /api/v1
 definitions:
+  model.PerlengkapanInput:
+    properties:
+      deskripsi:
+        type: string
+      harga:
+        type: integer
+      nama:
+        type: string
+      stok:
+        type: integer
+    required:
+    - deskripsi
+    - harga
+    - nama
+    - stok
+    type: object
   model.User:
     properties:
       city:
@@ -92,6 +108,162 @@ info:
   title: Islamind API
   version: "1.0"
 paths:
+  /perlengkapan:
+    get:
+      consumes:
+      - application/json
+      description: Menampilkan semua data perlengkapan
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.User'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menampilkan semua data perlengkapan
+      tags:
+      - Perlengkapan
+    post:
+      consumes:
+      - application/json
+      description: Membuat data perlengkapan baru
+      parameters:
+      - description: Perlengkapan data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.PerlengkapanInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.User'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Membuat data perlengkapan baru
+      tags:
+      - Perlengkapan
+  /perlengkapan/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Menghapus data perlengkapan berdasarkan id
+      parameters:
+      - description: ID Perlengkapan
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menghapus data perlengkapan berdasarkan id
+      tags:
+      - Perlengkapan
+    get:
+      consumes:
+      - application/json
+      description: Menampilkan data perlengkapan berdasarkan id
+      parameters:
+      - description: ID Perlengkapan
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.User'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menampilkan data perlengkapan berdasarkan id
+      tags:
+      - Perlengkapan
+    put:
+      consumes:
+      - application/json
+      description: Memperbarui data perlengkapan berdasarkan id
+      parameters:
+      - description: ID Perlengkapan
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Perlengkapan data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.PerlengkapanInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.User'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Memperbarui data perlengkapan berdasarkan id
+      tags:
+      - Perlengkapan
   /user:
     get:
       consumes:
