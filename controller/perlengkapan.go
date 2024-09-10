@@ -21,7 +21,7 @@ func NewPerlengkapanController(repoPerlengkapan *repositories.Perlengkapan) *Per
 // @Tags         Perlengkapan
 // @Accept       json
 // @Produce      json
-// @Success      201  {object}  utils.SuccessResponseData{data=model.User}
+// @Success      201  {object}  utils.SuccessResponseData{data=model.Perlengkapan}
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /perlengkapan [get]
 func (pc *Perlengkapan) FindAll(ctx *gin.Context) {
@@ -41,7 +41,7 @@ func (pc *Perlengkapan) FindAll(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id     path    string     true  "ID Perlengkapan"
-// @Success      201  {object}  utils.SuccessResponseData{data=model.User}
+// @Success      201  {object}  utils.SuccessResponseData{data=model.Perlengkapan}
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /perlengkapan/{id} [get]
 func (pc *Perlengkapan) FindByID(ctx *gin.Context) {
@@ -62,7 +62,7 @@ func (pc *Perlengkapan) FindByID(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param 		 request  body  model.PerlengkapanInput true "Perlengkapan data"
-// @Success      201  {object}  utils.SuccessResponseData{data=model.User}
+// @Success      201  {object}  utils.SuccessResponseData{data=model.Perlengkapan}
 // @Failure      422  {object}  utils.ErrorResponseData
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /perlengkapan [post]
@@ -91,7 +91,7 @@ func (pc *Perlengkapan) Create(ctx *gin.Context) {
 // @Produce      json
 // @Param        id     path    string     true  "ID Perlengkapan"
 // @Param 		 request  body  model.PerlengkapanInput true "Perlengkapan data"
-// @Success      201  {object}  utils.SuccessResponseData{data=model.User}
+// @Success      201  {object}  utils.SuccessResponseData{data=model.Perlengkapan}
 // @Failure      422  {object}  utils.ErrorResponseData
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /perlengkapan/{id} [put]

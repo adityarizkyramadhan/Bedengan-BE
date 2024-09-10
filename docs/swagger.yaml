@@ -1,5 +1,16 @@
 basePath: /api/v1
 definitions:
+  model.Kavling:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      nama:
+        type: string
+      updated_at:
+        type: string
+    type: object
   model.PerlengkapanInput:
     properties:
       deskripsi:
@@ -108,6 +119,30 @@ info:
   title: Islamind API
   version: "1.0"
 paths:
+  /kavling:
+    get:
+      consumes:
+      - application/json
+      description: Menampilkan semua data kavling
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Kavling'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menampilkan semua data kavling
+      tags:
+      - Kavling
   /perlengkapan:
     get:
       consumes:
