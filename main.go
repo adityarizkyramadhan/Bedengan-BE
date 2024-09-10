@@ -105,6 +105,11 @@ func main() {
 	perlengkapanRoutes := routes.NewPerlengkapanRoutes(perlengkapanController)
 	perlengkapanRoutes.SetupRoutes(v1)
 
+	repoKavling := repositories.NewKavlingRepository(db)
+	kavlingController := controller.NewKavlingController(repoKavling)
+	kavlingRoutes := routes.NewKavlingRoutes(kavlingController)
+	kavlingRoutes.SetupRoutes(v1)
+
 	// Setup server with context for graceful shutdown
 	srv := &http.Server{
 		Addr:    os.Getenv("PORT"),

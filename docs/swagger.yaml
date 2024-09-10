@@ -11,6 +11,30 @@ definitions:
       updated_at:
         type: string
     type: object
+  model.KavlingInput:
+    properties:
+      nama:
+        type: string
+    required:
+    - nama
+    type: object
+  model.Perlengkapan:
+    properties:
+      created_at:
+        type: string
+      deskripsi:
+        type: string
+      harga:
+        type: integer
+      id:
+        type: string
+      nama:
+        type: string
+      stok:
+        type: integer
+      updated_at:
+        type: string
+    type: object
   model.PerlengkapanInput:
     properties:
       deskripsi:
@@ -143,6 +167,124 @@ paths:
       summary: Menampilkan semua data kavling
       tags:
       - Kavling
+    post:
+      consumes:
+      - application/json
+      description: Membuat data kavling baru
+      parameters:
+      - description: Data Kavling
+        in: body
+        name: kavling
+        required: true
+        schema:
+          $ref: '#/definitions/model.KavlingInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Kavling'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Membuat data kavling baru
+      tags:
+      - Kavling
+  /kavling/{id}:
+    delete:
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Kavling'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+    get:
+      consumes:
+      - application/json
+      description: Menampilkan data kavling berdasarkan id
+      parameters:
+      - description: ID Kavling
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Kavling'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menampilkan data kavling berdasarkan id
+      tags:
+      - Kavling
+    put:
+      consumes:
+      - application/json
+      description: Memperbarui data kavling berdasarkan id
+      parameters:
+      - description: ID Kavling
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Data Kavling
+        in: body
+        name: kavling
+        required: true
+        schema:
+          $ref: '#/definitions/model.KavlingInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Kavling'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Memperbarui data kavling berdasarkan id
+      tags:
+      - Kavling
   /perlengkapan:
     get:
       consumes:
@@ -158,7 +300,7 @@ paths:
             - $ref: '#/definitions/utils.SuccessResponseData'
             - properties:
                 data:
-                  $ref: '#/definitions/model.User'
+                  $ref: '#/definitions/model.Perlengkapan'
               type: object
         "500":
           description: Internal Server Error
@@ -188,7 +330,7 @@ paths:
             - $ref: '#/definitions/utils.SuccessResponseData'
             - properties:
                 data:
-                  $ref: '#/definitions/model.User'
+                  $ref: '#/definitions/model.Perlengkapan'
               type: object
         "422":
           description: Unprocessable Entity
@@ -251,7 +393,7 @@ paths:
             - $ref: '#/definitions/utils.SuccessResponseData'
             - properties:
                 data:
-                  $ref: '#/definitions/model.User'
+                  $ref: '#/definitions/model.Perlengkapan'
               type: object
         "500":
           description: Internal Server Error
@@ -286,7 +428,7 @@ paths:
             - $ref: '#/definitions/utils.SuccessResponseData'
             - properties:
                 data:
-                  $ref: '#/definitions/model.User'
+                  $ref: '#/definitions/model.Perlengkapan'
               type: object
         "422":
           description: Unprocessable Entity
