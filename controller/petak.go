@@ -22,7 +22,7 @@ func NewPetakController(repoPetak *repositories.Petak) *Petak {
 // @Accept       json
 // @Produce      json
 // @Params 		 id_petak query string false "ID Petak"
-// @Success      201  {object}  utils.SuccessResponseData{data=model.Petak}
+// @Success      201  {object}  utils.SuccessResponseData{data=[]model.Petak}
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /petak [get]
 func (pc *Petak) FindAll(ctx *gin.Context) {

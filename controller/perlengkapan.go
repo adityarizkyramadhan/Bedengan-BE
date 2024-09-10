@@ -21,7 +21,7 @@ func NewPerlengkapanController(repoPerlengkapan *repositories.Perlengkapan) *Per
 // @Tags         Perlengkapan
 // @Accept       json
 // @Produce      json
-// @Success      201  {object}  utils.SuccessResponseData{data=model.Perlengkapan}
+// @Success      201  {object}  utils.SuccessResponseData{data=[]model.Perlengkapan}
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /perlengkapan [get]
 func (pc *Perlengkapan) FindAll(ctx *gin.Context) {

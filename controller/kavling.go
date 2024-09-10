@@ -21,7 +21,7 @@ func NewKavlingController(repoKavling *repositories.Kavling) *Kavling {
 // @Tags         Kavling
 // @Accept       json
 // @Produce      json
-// @Success      201  {object}  utils.SuccessResponseData{data=model.Kavling}
+// @Success      201  {object}  utils.SuccessResponseData{data=[]model.Kavling}
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /kavling [get]
 func (kc *Kavling) FindAll(ctx *gin.Context) {
