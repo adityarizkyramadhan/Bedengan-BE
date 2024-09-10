@@ -228,6 +228,35 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "description": "Menghapus data kavling berdasarkan id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kavling"
+                ],
+                "summary": "Menghapus data kavling berdasarkan id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID Kavling",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Data Kavling",
+                        "name": "kavling",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.KavlingInput"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Created",
@@ -499,6 +528,258 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/petak": {
+            "get": {
+                "description": "Menampilkan semua data petak",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Petak"
+                ],
+                "summary": "Menampilkan semua data petak",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Petak"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Membuat data petak baru",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Petak"
+                ],
+                "summary": "Membuat data petak baru",
+                "parameters": [
+                    {
+                        "description": "Data Petak",
+                        "name": "petak",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.PetakInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Petak"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/petak/{id}": {
+            "get": {
+                "description": "Menampilkan data petak berdasarkan id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Petak"
+                ],
+                "summary": "Menampilkan data petak berdasarkan id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID Petak",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Petak"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Memperbarui data petak berdasarkan id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Petak"
+                ],
+                "summary": "Memperbarui data petak berdasarkan id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID Petak",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Data Petak",
+                        "name": "petak",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.PetakInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Petak"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Menghapus data petak berdasarkan id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Petak"
+                ],
+                "summary": "Menghapus data petak berdasarkan id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID Petak",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Petak"
                                         }
                                     }
                                 }
@@ -993,6 +1274,62 @@ const docTemplate = `{
                 },
                 "stok": {
                     "type": "integer"
+                }
+            }
+        },
+        "model.Petak": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "harga": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "jenis_tenda": {
+                    "type": "string"
+                },
+                "kavling_id": {
+                    "type": "string"
+                },
+                "nama": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.PetakInput": {
+            "type": "object",
+            "required": [
+                "harga",
+                "jenis_tenda",
+                "kavling_id",
+                "nama",
+                "status"
+            ],
+            "properties": {
+                "harga": {
+                    "type": "integer"
+                },
+                "jenis_tenda": {
+                    "type": "string"
+                },
+                "kavling_id": {
+                    "type": "string"
+                },
+                "nama": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },

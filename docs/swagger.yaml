@@ -51,6 +51,44 @@ definitions:
     - nama
     - stok
     type: object
+  model.Petak:
+    properties:
+      created_at:
+        type: string
+      harga:
+        type: integer
+      id:
+        type: string
+      jenis_tenda:
+        type: string
+      kavling_id:
+        type: string
+      nama:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  model.PetakInput:
+    properties:
+      harga:
+        type: integer
+      jenis_tenda:
+        type: string
+      kavling_id:
+        type: string
+      nama:
+        type: string
+      status:
+        type: string
+    required:
+    - harga
+    - jenis_tenda
+    - kavling_id
+    - nama
+    - status
+    type: object
   model.User:
     properties:
       city:
@@ -203,6 +241,23 @@ paths:
       - Kavling
   /kavling/{id}:
     delete:
+      consumes:
+      - application/json
+      description: Menghapus data kavling berdasarkan id
+      parameters:
+      - description: ID Kavling
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Data Kavling
+        in: body
+        name: kavling
+        required: true
+        schema:
+          $ref: '#/definitions/model.KavlingInput'
+      produces:
+      - application/json
       responses:
         "201":
           description: Created
@@ -217,6 +272,9 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menghapus data kavling berdasarkan id
+      tags:
+      - Kavling
     get:
       consumes:
       - application/json
@@ -441,6 +499,158 @@ paths:
       summary: Memperbarui data perlengkapan berdasarkan id
       tags:
       - Perlengkapan
+  /petak:
+    get:
+      consumes:
+      - application/json
+      description: Menampilkan semua data petak
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Petak'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menampilkan semua data petak
+      tags:
+      - Petak
+    post:
+      consumes:
+      - application/json
+      description: Membuat data petak baru
+      parameters:
+      - description: Data Petak
+        in: body
+        name: petak
+        required: true
+        schema:
+          $ref: '#/definitions/model.PetakInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Petak'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Membuat data petak baru
+      tags:
+      - Petak
+  /petak/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Menghapus data petak berdasarkan id
+      parameters:
+      - description: ID Petak
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Petak'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menghapus data petak berdasarkan id
+      tags:
+      - Petak
+    get:
+      consumes:
+      - application/json
+      description: Menampilkan data petak berdasarkan id
+      parameters:
+      - description: ID Petak
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Petak'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menampilkan data petak berdasarkan id
+      tags:
+      - Petak
+    put:
+      consumes:
+      - application/json
+      description: Memperbarui data petak berdasarkan id
+      parameters:
+      - description: ID Petak
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Data Petak
+        in: body
+        name: petak
+        required: true
+        schema:
+          $ref: '#/definitions/model.PetakInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Petak'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Memperbarui data petak berdasarkan id
+      tags:
+      - Petak
   /user:
     get:
       consumes:

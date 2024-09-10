@@ -110,6 +110,11 @@ func main() {
 	kavlingRoutes := routes.NewKavlingRoutes(kavlingController)
 	kavlingRoutes.SetupRoutes(v1)
 
+	repoPetak := repositories.NewPetakRepository(db)
+	petakController := controller.NewPetakController(repoPetak)
+	petakRoutes := routes.NewPetakRoutes(petakController)
+	petakRoutes.SetupRoutes(v1)
+
 	// Setup server with context for graceful shutdown
 	srv := &http.Server{
 		Addr:    os.Getenv("PORT"),
