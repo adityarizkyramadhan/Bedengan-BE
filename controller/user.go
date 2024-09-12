@@ -23,7 +23,7 @@ func NewUserController(repoUser repositories.UserInterface) *User {
 // @Summary      Register new user
 // @Description  Register new user
 // @Tags         User
-// @Accept       json
+// @Accept       form-data
 // @Produce      json
 // @Param 		 request  body  model.UserCreate true "User data"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.User}
@@ -32,7 +32,7 @@ func NewUserController(repoUser repositories.UserInterface) *User {
 // @Router       /user/register [post]
 func (u *User) Register(ctx *gin.Context) {
 	user := &model.UserCreate{}
-	if err := ctx.ShouldBindJSON(user); err != nil {
+	if err := ctx.ShouldBind(user); err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
 		return
@@ -44,14 +44,6 @@ func (u *User) Register(ctx *gin.Context) {
 		ctx.Next()
 		return
 	}
-
-	utils.MailClient().SendMailAsync(
-		[]string{newUser.Email},
-		[]string{},
-		"OTP",
-		utils.CreateHTMLOTP(newUser.Name, newUser.Province, newUser.City, newUser.OTP),
-	)
-
 	utils.SuccessResponse(ctx, http.StatusCreated, newUser)
 }
 
@@ -143,63 +135,6 @@ func (u *User) FindOne(ctx *gin.Context) {
 		ctx.Next()
 		return
 	}
-	utils.SuccessResponse(ctx, http.StatusOK, user)
-}
-
-// VerifyOTP will verify otp
-// @Summary      Verify OTP
-// @Description  Verify OTP
-// @Tags         User
-// @Accept       json
-// @Produce      json
-// @Param 		 otp  path  string true "OTP"
-// @Success      200  {object}  utils.SuccessResponseData{data=model.User}
-// @Failure      422  {object}  utils.ErrorResponseData
-// @Failure      500  {object}  utils.ErrorResponseData
-// @Router       /user/verify/{otp} [get]
-func (u *User) VerifyOTP(ctx *gin.Context) {
-	otp := ctx.Param("otp")
-	user, err := u.repoUser.VerifyOTP(otp)
-	if err != nil {
-		_ = ctx.Error(err)
-		ctx.Next()
-		return
-	}
-	utils.SuccessResponse(ctx, http.StatusOK, user)
-}
-
-// ResendEmailOTP will resend email OTP
-// @Summary      Resend email OTP
-// @Description  Resend email OTP
-// @Tags         User
-// @Accept       json
-// @Produce      json
-// @Param 		 email  path  string true "User email"
-// @Success      200  {object}  utils.SuccessResponseData{data=model.User}
-// @Failure      422  {object}  utils.ErrorResponseData
-// @Failure      500  {object}  utils.ErrorResponseData
-// @Router       /user/resend/{email} [get]
-func (u *User) ResendEmailOTP(ctx *gin.Context) {
-	email := ctx.Param("email")
-	user, err := u.repoUser.ResendEmailOTP(email)
-	if err != nil {
-		_ = ctx.Error(err)
-		ctx.Next()
-		return
-	}
-
-	err = utils.MailClient().SendMailSync(
-		[]string{user.Email},
-		[]string{},
-		"OTP Islamind",
-		utils.CreateHTMLOTP(user.Name, user.Province, user.City, user.OTP),
-	)
-	if err != nil {
-		_ = ctx.Error(err)
-		ctx.Next()
-		return
-	}
-
 	utils.SuccessResponse(ctx, http.StatusOK, user)
 }
 

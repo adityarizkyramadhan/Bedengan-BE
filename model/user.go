@@ -19,14 +19,8 @@ type User struct {
 	Role string `json:"role" gorm:"type:varchar(255);not null"`
 	// Password disimpan dalam bentuk hash
 	Password string `json:"-" gorm:"type:text;not null"`
-	// OTP digunakan untuk konfirmasi email
-	OTP string `json:"-" gorm:"type:varchar(5)"`
-	// IsVerified menandakan apakah email sudah diverifikasi
-	IsVerified bool `json:"-" gorm:"type:tinyint(1);default:0"`
-	// Provinsi tempat tinggal user
-	Province string `json:"province" gorm:"type:varchar(255)"`
-	// Kota tempat tinggal user
-	City string `json:"city" gorm:"type:varchar(255)"`
+	// Link KTP merupakan link ke file KTP
+	LinkKTP string `json:"link_ktp" gorm:"type:text"`
 	// CreatedAt menandakan waktu user dibuat
 	CreatedAt time.Time `json:"-" gorm:"type:timestamp;default:CURRENT_TIMESTAMP"`
 	// UpdatedAt menandakan waktu user terakhir diupdate
@@ -40,12 +34,13 @@ func (u User) TableName() string {
 }
 
 type UserCreate struct {
-	Email           string `json:"email" binding:"required,email"`
-	Name            string `json:"name" binding:"required"`
-	Password        string `json:"password" binding:"required"`
-	ConfirmPassword string `json:"confirm_password" binding:"required,eqfield=Password"`
-	Province        string `json:"province" binding:"required"`
-	City            string `json:"city" binding:"required"`
+	Email           string `form:"email" binding:"required,email"`
+	Name            string `form:"name" binding:"required"`
+	Password        string `form:"password" binding:"required"`
+	ConfirmPassword string `form:"confirm_password" binding:"required,eqfield=Password"`
+	Province        string `form:"province" binding:"required"`
+	City            string `form:"city" binding:"required"`
+	FileKTP         string `form:"file_ktp" binding:"required"`
 }
 
 type UserLogin struct {

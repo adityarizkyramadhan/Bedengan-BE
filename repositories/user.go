@@ -22,8 +22,6 @@ type (
 		Create(user *model.UserCreate) (*model.User, error)
 		Update(id uuid.UUID, user *model.UserUpdate) (*model.User, error)
 		Delete(id uuid.UUID) error
-		VerifyOTP(otp string) (*model.User, error)
-		ResendEmailOTP(email string) (*model.User, error)
 		Login(email, password string) (*model.User, error)
 		Logout(token string, expired time.Duration) error
 	}
@@ -60,24 +58,17 @@ func (u *User) Create(user *model.UserCreate) (*model.User, error) {
 
 	id := uuid.New()
 
-	// ambil otp dari id sebanyak character 5
-	otp := id.String()[0:5]
-
 	hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, utils.NewError(utils.ErrUnknown, "gagal membuat password")
 	}
 
 	newUser := model.User{
-		ID:         id,
-		Name:       user.Name,
-		Email:      user.Email,
-		Password:   string(hashPassword),
-		Province:   user.Province,
-		City:       user.City,
-		OTP:        otp,
-		Role:       "user",
-		IsVerified: false,
+		ID:       id,
+		Name:     user.Name,
+		Email:    user.Email,
+		Password: string(hashPassword),
+		Role:     "user",
 	}
 
 	var searchUser model.User
@@ -88,11 +79,7 @@ func (u *User) Create(user *model.UserCreate) (*model.User, error) {
 	} else {
 		// update user yang sudah ada
 		searchUser.Name = user.Name
-		searchUser.Province = user.Province
-		searchUser.City = user.City
-		searchUser.OTP = otp
 		searchUser.Role = "user"
-		searchUser.IsVerified = false
 		if err := u.db.Save(&searchUser).Error; err != nil {
 			return nil, utils.NewError(utils.ErrUnknown, "gagal membuat user")
 		}
@@ -111,12 +98,6 @@ func (u *User) Update(id uuid.UUID, user *model.UserUpdate) (*model.User, error)
 	if user.Name != "" {
 		oldUser.Name = user.Name
 	}
-	if user.Province != "" {
-		oldUser.Province = user.Province
-	}
-	if user.City != "" {
-		oldUser.City = user.City
-	}
 	if err := u.db.Save(&oldUser).Error; err != nil {
 		return nil, utils.NewError(utils.ErrUnknown, "gagal update user")
 	}
@@ -131,44 +112,11 @@ func (u *User) Delete(id uuid.UUID) error {
 	return nil
 }
 
-// VerifyOTP will verify otp
-func (u *User) VerifyOTP(otp string) (*model.User, error) {
-	var user model.User
-	if err := u.db.Where("otp = ?", otp).First(&user).Error; err != nil {
-		return nil, utils.NewError(utils.ErrNotFound, "otp tidak ditemukan")
-	}
-	user.IsVerified = true
-	if err := u.db.Save(&user).Error; err != nil {
-		return nil, utils.NewError(utils.ErrUnknown, "gagal verifikasi otp")
-	}
-	return &user, nil
-}
-
-func (u *User) ResendEmailOTP(email string) (*model.User, error) {
-	var user model.User
-	if err := u.db.Where("email = ?", email).First(&user).Error; err != nil {
-		return nil, utils.NewError(utils.ErrNotFound, "pengguna tidak ditemukan")
-	}
-
-	// ambil otp dari id sebanyak character 5
-	otp := user.ID.String()[0:5]
-
-	user.OTP = otp
-	if err := u.db.Save(&user).Error; err != nil {
-		return nil, utils.NewError(utils.ErrUnknown, "gagal mengirim ulang otp")
-	}
-	return &user, nil
-}
-
 // Login will login a user
 func (u *User) Login(email, password string) (*model.User, error) {
 	var user model.User
 	if err := u.db.Where("email = ?", email).First(&user).Error; err != nil {
 		return nil, utils.NewError(utils.ErrNotFound, "pengguna tidak ditemukan")
-	}
-
-	if !user.IsVerified {
-		return nil, utils.NewError(utils.ErrValidation, "email belum diverifikasi")
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
