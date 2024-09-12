@@ -91,19 +91,16 @@ definitions:
     type: object
   model.User:
     properties:
-      city:
-        description: Kota tempat tinggal user
-        type: string
       email:
         description: Email bersifat unik dan tidak boleh kosong
         type: string
       id:
         type: string
+      link_ktp:
+        description: Link KTP merupakan link ke file KTP
+        type: string
       name:
         description: Name tidak boleh kosong
-        type: string
-      province:
-        description: Provinsi tempat tinggal user
         type: string
       role:
         description: Role merupakan enum yang berisi "admin" dan "user" dan not null
@@ -117,6 +114,8 @@ definitions:
         type: string
       email:
         type: string
+      file_ktp:
+        type: string
       name:
         type: string
       password:
@@ -127,6 +126,7 @@ definitions:
     - city
     - confirm_password
     - email
+    - file_ktp
     - name
     - password
     - province
@@ -196,7 +196,9 @@ paths:
             - $ref: '#/definitions/utils.SuccessResponseData'
             - properties:
                 data:
-                  $ref: '#/definitions/model.Kavling'
+                  items:
+                    $ref: '#/definitions/model.Kavling'
+                  type: array
               type: object
         "500":
           description: Internal Server Error
@@ -216,6 +218,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.KavlingInput'
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -248,6 +255,11 @@ paths:
       - description: ID Kavling
         in: path
         name: id
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
         required: true
         type: string
       - description: Data Kavling
@@ -320,6 +332,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.KavlingInput'
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -358,7 +375,9 @@ paths:
             - $ref: '#/definitions/utils.SuccessResponseData'
             - properties:
                 data:
-                  $ref: '#/definitions/model.Perlengkapan'
+                  items:
+                    $ref: '#/definitions/model.Perlengkapan'
+                  type: array
               type: object
         "500":
           description: Internal Server Error
@@ -372,6 +391,11 @@ paths:
       - application/json
       description: Membuat data perlengkapan baru
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Perlengkapan data
         in: body
         name: request
@@ -410,6 +434,11 @@ paths:
       - description: ID Perlengkapan
         in: path
         name: id
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
         required: true
         type: string
       produces:
@@ -470,6 +499,11 @@ paths:
         name: id
         required: true
         type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Perlengkapan data
         in: body
         name: request
@@ -514,7 +548,9 @@ paths:
             - $ref: '#/definitions/utils.SuccessResponseData'
             - properties:
                 data:
-                  $ref: '#/definitions/model.Petak'
+                  items:
+                    $ref: '#/definitions/model.Petak'
+                  type: array
               type: object
         "500":
           description: Internal Server Error
@@ -534,6 +570,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.PetakInput'
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -566,6 +607,11 @@ paths:
       - description: ID Petak
         in: path
         name: id
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
         required: true
         type: string
       produces:
@@ -624,6 +670,11 @@ paths:
       - description: ID Petak
         in: path
         name: id
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
         required: true
         type: string
       - description: Data Petak
@@ -796,7 +847,7 @@ paths:
   /user/register:
     post:
       consumes:
-      - application/json
+      - multipart/form-data
       description: Register new user
       parameters:
       - description: User data
@@ -826,74 +877,6 @@ paths:
           schema:
             $ref: '#/definitions/utils.ErrorResponseData'
       summary: Register new user
-      tags:
-      - User
-  /user/resend/{email}:
-    get:
-      consumes:
-      - application/json
-      description: Resend email OTP
-      parameters:
-      - description: User email
-        in: path
-        name: email
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.SuccessResponseData'
-            - properties:
-                data:
-                  $ref: '#/definitions/model.User'
-              type: object
-        "422":
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Resend email OTP
-      tags:
-      - User
-  /user/verify/{otp}:
-    get:
-      consumes:
-      - application/json
-      description: Verify OTP
-      parameters:
-      - description: OTP
-        in: path
-        name: otp
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.SuccessResponseData'
-            - properties:
-                data:
-                  $ref: '#/definitions/model.User'
-              type: object
-        "422":
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Verify OTP
       tags:
       - User
 swagger: "2.0"

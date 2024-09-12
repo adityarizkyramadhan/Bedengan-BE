@@ -61,6 +61,7 @@ func (pc *Perlengkapan) FindByID(ctx *gin.Context) {
 // @Tags         Perlengkapan
 // @Accept       json
 // @Produce      json
+// @Param 		 Authorization header string true "Bearer token"
 // @Param 		 request  body  model.PerlengkapanInput true "Perlengkapan data"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Perlengkapan}
 // @Failure      422  {object}  utils.ErrorResponseData
@@ -90,6 +91,7 @@ func (pc *Perlengkapan) Create(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id     path    string     true  "ID Perlengkapan"
+// @Param 		 Authorization header string true "Bearer token"
 // @Param 		 request  body  model.PerlengkapanInput true "Perlengkapan data"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Perlengkapan}
 // @Failure      422  {object}  utils.ErrorResponseData
@@ -120,6 +122,7 @@ func (pc *Perlengkapan) Update(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id     path    string     true  "ID Perlengkapan"
+// @Param 		 Authorization header string true "Bearer token"
 // @Success      200  {object}  utils.SuccessResponseData{data=string}
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /perlengkapan/{id} [delete]

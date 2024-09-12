@@ -23,7 +23,7 @@ func NewUserController(repoUser repositories.UserInterface) *User {
 // @Summary      Register new user
 // @Description  Register new user
 // @Tags         User
-// @Accept       form-data
+// @Accept       multipart/form-data
 // @Produce      json
 // @Param 		 request  body  model.UserCreate true "User data"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.User}

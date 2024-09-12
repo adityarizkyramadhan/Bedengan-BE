@@ -62,6 +62,7 @@ func (kc *Kavling) FindByID(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        kavling     body    model.KavlingInput     true  "Data Kavling"
+// @Param 		 Authorization header string true "Bearer token"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Kavling}
 // @Failure      422  {object}  utils.ErrorResponseData
 // @Failure      500  {object}  utils.ErrorResponseData
@@ -91,6 +92,7 @@ func (kc *Kavling) Create(ctx *gin.Context) {
 // @Produce      json
 // @Param        id     path    string     true  "ID Kavling"
 // @Param        kavling     body    model.KavlingInput     true  "Data Kavling"
+// @Param 		 Authorization header string true "Bearer token"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Kavling}
 // @Failure      422  {object}  utils.ErrorResponseData
 // @Failure      500  {object}  utils.ErrorResponseData
@@ -120,6 +122,7 @@ func (kc *Kavling) Update(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id     path    string     true  "ID Kavling"
+// @Param 		 Authorization header string true "Bearer token"
 // @Param        kavling     body    model.KavlingInput     true  "Data Kavling"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Kavling}
 // @Failure      500  {object}  utils.ErrorResponseData

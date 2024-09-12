@@ -43,7 +43,10 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Kavling"
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Kavling"
+                                            }
                                         }
                                     }
                                 }
@@ -79,6 +82,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.KavlingInput"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -192,6 +202,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.KavlingInput"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -245,6 +262,13 @@ const docTemplate = `{
                         "description": "ID Kavling",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     },
                     {
@@ -310,7 +334,10 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Perlengkapan"
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Perlengkapan"
+                                            }
                                         }
                                     }
                                 }
@@ -338,6 +365,13 @@ const docTemplate = `{
                 ],
                 "summary": "Membuat data perlengkapan baru",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "description": "Perlengkapan data",
                         "name": "request",
@@ -452,6 +486,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "Perlengkapan data",
                         "name": "request",
                         "in": "body",
@@ -513,6 +554,13 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -568,7 +616,10 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Petak"
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Petak"
+                                            }
                                         }
                                     }
                                 }
@@ -604,6 +655,13 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.PetakInput"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -710,6 +768,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "Data Petak",
                         "name": "petak",
                         "in": "body",
@@ -764,6 +829,13 @@ const docTemplate = `{
                         "description": "ID Petak",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
                         "required": true
                     }
                 ],
@@ -1032,7 +1104,7 @@ const docTemplate = `{
             "post": {
                 "description": "Register new user",
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -1055,118 +1127,6 @@ const docTemplate = `{
                 "responses": {
                     "201": {
                         "description": "Created",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.SuccessResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.User"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/resend/{email}": {
-            "get": {
-                "description": "Resend email OTP",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Resend email OTP",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User email",
-                        "name": "email",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.SuccessResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.User"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/verify/{otp}": {
-            "get": {
-                "description": "Verify OTP",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Verify OTP",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "OTP",
-                        "name": "otp",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
                         "schema": {
                             "allOf": [
                                 {
@@ -1336,10 +1296,6 @@ const docTemplate = `{
         "model.User": {
             "type": "object",
             "properties": {
-                "city": {
-                    "description": "Kota tempat tinggal user",
-                    "type": "string"
-                },
                 "email": {
                     "description": "Email bersifat unik dan tidak boleh kosong",
                     "type": "string"
@@ -1347,12 +1303,12 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
-                "name": {
-                    "description": "Name tidak boleh kosong",
+                "link_ktp": {
+                    "description": "Link KTP merupakan link ke file KTP",
                     "type": "string"
                 },
-                "province": {
-                    "description": "Provinsi tempat tinggal user",
+                "name": {
+                    "description": "Name tidak boleh kosong",
                     "type": "string"
                 },
                 "role": {
@@ -1367,6 +1323,7 @@ const docTemplate = `{
                 "city",
                 "confirm_password",
                 "email",
+                "file_ktp",
                 "name",
                 "password",
                 "province"
@@ -1379,6 +1336,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "email": {
+                    "type": "string"
+                },
+                "file_ktp": {
                     "type": "string"
                 },
                 "name": {

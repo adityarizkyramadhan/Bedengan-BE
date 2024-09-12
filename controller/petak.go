@@ -64,6 +64,7 @@ func (pc *Petak) FindByID(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        petak     body    model.PetakInput     true  "Data Petak"
+// @Param 		 Authorization header string true "Bearer token"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Petak}
 // @Failure      422  {object}  utils.ErrorResponseData
 // @Failure      500  {object}  utils.ErrorResponseData
@@ -90,6 +91,7 @@ func (pc *Petak) Create(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id     path    string     true  "ID Petak"
+// @Param 		 Authorization header string true "Bearer token"
 // @Param        petak     body    model.PetakInput     true  "Data Petak"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Petak}
 // @Failure      500  {object}  utils.ErrorResponseData
@@ -117,6 +119,7 @@ func (pc *Petak) Update(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id     path    string     true  "ID Petak"
+// @Param 		 Authorization header string true "Bearer token"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Petak}
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /petak/{id} [delete]
