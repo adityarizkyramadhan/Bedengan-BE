@@ -51,6 +51,9 @@ func main() {
 
 	err = db.AutoMigrate(
 		&model.User{},
+		&model.Perlengkapan{},
+		&model.Kavling{},
+		&model.Petak{},
 	)
 
 	if err != nil {
