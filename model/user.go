@@ -1,6 +1,7 @@
 package model
 
 import (
+	"mime/multipart"
 	"time"
 
 	"github.com/google/uuid"
@@ -10,7 +11,7 @@ import (
 // User represents a user model.
 // swagger:model User
 type User struct {
-	ID uuid.UUID `json:"id" gorm:"type:char(36);primary_key"`
+	ID string `json:"id" gorm:"type:char(36);primary_key"`
 	// Email bersifat unik dan tidak boleh kosong
 	Email string `json:"email" gorm:"type:varchar(255);unique;not null"`
 	// Name tidak boleh kosong
@@ -33,14 +34,24 @@ func (u User) TableName() string {
 	return "users"
 }
 
+func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
+	id, err := uuid.NewV6()
+	if err != nil {
+		return err
+	}
+	u.ID = id.String()
+	u.Role = "user"
+	u.CreatedAt = time.Now()
+	u.UpdatedAt = time.Now()
+	return
+}
+
 type UserCreate struct {
-	Email           string `form:"email" binding:"required,email"`
-	Name            string `form:"name" binding:"required"`
-	Password        string `form:"password" binding:"required"`
-	ConfirmPassword string `form:"confirm_password" binding:"required,eqfield=Password"`
-	Province        string `form:"province" binding:"required"`
-	City            string `form:"city" binding:"required"`
-	FileKTP         string `form:"file_ktp" binding:"required"`
+	Email           string                `form:"email" binding:"required,email"`
+	Name            string                `form:"name" binding:"required"`
+	Password        string                `form:"password" binding:"required"`
+	ConfirmPassword string                `form:"confirm_password" binding:"required,eqfield=Password"`
+	FileKTP         *multipart.FileHeader `form:"file_ktp" binding:"required"`
 }
 
 type UserLogin struct {

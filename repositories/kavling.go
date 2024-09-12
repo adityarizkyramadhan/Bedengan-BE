@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"github.com/adityarizkyramadhan/template-go-mvc/model"
-	"github.com/adityarizkyramadhan/template-go-mvc/utils"
 	"gorm.io/gorm"
 )
 
@@ -14,39 +13,39 @@ func NewKavlingRepository(db *gorm.DB) *Kavling {
 	return &Kavling{db}
 }
 
-func (k *Kavling) FindAll() ([]model.Kavling, error) {
-	var kavlings []model.Kavling
-	if err := k.db.Find(&kavlings).Error; err != nil {
-		return nil, utils.NewError(utils.ErrNotFound, "kavling tidak ditemukan")
+func (p *Kavling) FindAll(idKavling string) ([]model.Kavling, error) {
+	var Kavlings []model.Kavling
+	if err := p.db.Find(&Kavlings, "id_Kavling = ?", idKavling).Error; err != nil {
+		return nil, err
 	}
-	return kavlings, nil
+	return Kavlings, nil
 }
 
-func (k *Kavling) FindByID(id string) (*model.Kavling, error) {
-	var kavling model.Kavling
-	if err := k.db.First(&kavling, "id = ?", id).Error; err != nil {
-		return nil, utils.NewError(utils.ErrNotFound, "kavling tidak ditemukan")
+func (p *Kavling) FindByID(id string) (*model.Kavling, error) {
+	var Kavling model.Kavling
+	if err := p.db.First(&Kavling, "id = ?", id).Error; err != nil {
+		return nil, err
 	}
-	return &kavling, nil
+	return &Kavling, nil
 }
 
-func (k *Kavling) Create(kavling *model.KavlingInput) error {
-	if err := k.db.Create(kavling.ToKavling()).Error; err != nil {
-		return utils.NewError(utils.ErrInternalServer, "gagal membuat kavling")
-	}
-	return nil
-}
-
-func (k *Kavling) Update(id string, kavling *model.KavlingInput) error {
-	if err := k.db.Model(&model.Kavling{}).Where("id = ?", id).Updates(kavling.ToKavling()).Error; err != nil {
-		return utils.NewError(utils.ErrInternalServer, "gagal memperbarui kavling")
+func (p *Kavling) Create(Kavling *model.KavlingInput) error {
+	if err := p.db.Create(Kavling.ToKavling()).Error; err != nil {
+		return err
 	}
 	return nil
 }
 
-func (k *Kavling) Delete(id string) error {
-	if err := k.db.Delete(&model.Kavling{}, "id = ?", id).Error; err != nil {
-		return utils.NewError(utils.ErrInternalServer, "gagal menghapus kavling")
+func (p *Kavling) Update(id string, Kavling *model.KavlingInput) error {
+	if err := p.db.Model(&model.Kavling{}).Where("id = ?", id).Updates(Kavling.ToKavling()).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *Kavling) Delete(id string) error {
+	if err := p.db.Delete(&model.Kavling{}, "id = ?", id).Error; err != nil {
+		return err
 	}
 	return nil
 }

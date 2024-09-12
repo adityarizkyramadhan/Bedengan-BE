@@ -1,22 +1,65 @@
 basePath: /api/v1
 definitions:
-  model.Kavling:
+  model.Ground:
     properties:
       created_at:
         type: string
       id:
+        type: string
+      image_link:
         type: string
       nama:
         type: string
       updated_at:
         type: string
     type: object
-  model.KavlingInput:
+  model.GroundInput:
     properties:
       nama:
         type: string
     required:
     - nama
+    type: object
+  model.Kavling:
+    properties:
+      created_at:
+        type: string
+      harga:
+        description: Sesuaikan tipe harga ke bigint
+        type: integer
+      id:
+        type: string
+      jenis_tenda:
+        type: string
+      kavling_id:
+        description: Ganti dari uuid ke varchar(36)
+        type: string
+      nama:
+        type: string
+      status:
+        description: GORM default
+        type: string
+      updated_at:
+        type: string
+    type: object
+  model.KavlingInput:
+    properties:
+      harga:
+        type: integer
+      jenis_tenda:
+        type: string
+      kavling_id:
+        type: string
+      nama:
+        type: string
+      status:
+        type: string
+    required:
+    - harga
+    - jenis_tenda
+    - kavling_id
+    - nama
+    - status
     type: object
   model.Perlengkapan:
     properties:
@@ -51,44 +94,6 @@ definitions:
     - nama
     - stok
     type: object
-  model.Petak:
-    properties:
-      created_at:
-        type: string
-      harga:
-        type: integer
-      id:
-        type: string
-      jenis_tenda:
-        type: string
-      kavling_id:
-        type: string
-      nama:
-        type: string
-      status:
-        type: string
-      updated_at:
-        type: string
-    type: object
-  model.PetakInput:
-    properties:
-      harga:
-        type: integer
-      jenis_tenda:
-        type: string
-      kavling_id:
-        type: string
-      nama:
-        type: string
-      status:
-        type: string
-    required:
-    - harga
-    - jenis_tenda
-    - kavling_id
-    - nama
-    - status
-    type: object
   model.User:
     properties:
       email:
@@ -107,29 +112,6 @@ definitions:
         type: string
     type: object
   model.UserCreate:
-    properties:
-      city:
-        type: string
-      confirm_password:
-        type: string
-      email:
-        type: string
-      file_ktp:
-        type: string
-      name:
-        type: string
-      password:
-        type: string
-      province:
-        type: string
-    required:
-    - city
-    - confirm_password
-    - email
-    - file_ktp
-    - name
-    - password
-    - province
     type: object
   model.UserLogin:
     properties:
@@ -181,11 +163,11 @@ info:
   title: Islamind API
   version: "1.0"
 paths:
-  /kavling:
+  /avling:
     get:
       consumes:
       - application/json
-      description: Menampilkan semua data kavling
+      description: Menampilkan semua data Kavling
       produces:
       - application/json
       responses:
@@ -204,17 +186,17 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Menampilkan semua data kavling
+      summary: Menampilkan semua data Kavling
       tags:
       - Kavling
     post:
       consumes:
       - application/json
-      description: Membuat data kavling baru
+      description: Membuat data Kavling baru
       parameters:
       - description: Data Kavling
         in: body
-        name: kavling
+        name: Kavling
         required: true
         schema:
           $ref: '#/definitions/model.KavlingInput'
@@ -243,14 +225,14 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Membuat data kavling baru
+      summary: Membuat data Kavling baru
       tags:
       - Kavling
-  /kavling/{id}:
+  /avling/{id}:
     delete:
       consumes:
       - application/json
-      description: Menghapus data kavling berdasarkan id
+      description: Menghapus data Kavling berdasarkan id
       parameters:
       - description: ID Kavling
         in: path
@@ -262,12 +244,6 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: Data Kavling
-        in: body
-        name: kavling
-        required: true
-        schema:
-          $ref: '#/definitions/model.KavlingInput'
       produces:
       - application/json
       responses:
@@ -284,13 +260,13 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Menghapus data kavling berdasarkan id
+      summary: Menghapus data Kavling berdasarkan id
       tags:
       - Kavling
     get:
       consumes:
       - application/json
-      description: Menampilkan data kavling berdasarkan id
+      description: Menampilkan data Kavling berdasarkan id
       parameters:
       - description: ID Kavling
         in: path
@@ -313,25 +289,86 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Menampilkan data kavling berdasarkan id
+      summary: Menampilkan data Kavling berdasarkan id
       tags:
       - Kavling
     put:
       consumes:
       - application/json
-      description: Memperbarui data kavling berdasarkan id
+      description: Memperbarui data Kavling berdasarkan id
       parameters:
       - description: ID Kavling
         in: path
         name: id
         required: true
         type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Data Kavling
         in: body
-        name: kavling
+        name: Kavling
         required: true
         schema:
           $ref: '#/definitions/model.KavlingInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Kavling'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Memperbarui data Kavling berdasarkan id
+      tags:
+      - Kavling
+  /ground:
+    get:
+      consumes:
+      - application/json
+      description: Menampilkan semua data Ground
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Ground'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menampilkan semua data Ground
+      tags:
+      - Ground
+    post:
+      consumes:
+      - application/json
+      description: Membuat data Ground baru
+      parameters:
+      - description: Data Ground
+        in: body
+        name: Ground
+        required: true
+        schema:
+          $ref: '#/definitions/model.GroundInput'
       - description: Bearer token
         in: header
         name: Authorization
@@ -347,7 +384,7 @@ paths:
             - $ref: '#/definitions/utils.SuccessResponseData'
             - properties:
                 data:
-                  $ref: '#/definitions/model.Kavling'
+                  $ref: '#/definitions/model.Ground'
               type: object
         "422":
           description: Unprocessable Entity
@@ -357,9 +394,123 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Memperbarui data kavling berdasarkan id
+      summary: Membuat data Ground baru
       tags:
-      - Kavling
+      - Ground
+  /ground/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Menghapus data Ground berdasarkan id
+      parameters:
+      - description: ID Ground
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Data Ground
+        in: body
+        name: Ground
+        required: true
+        schema:
+          $ref: '#/definitions/model.GroundInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Ground'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menghapus data Ground berdasarkan id
+      tags:
+      - Ground
+    get:
+      consumes:
+      - application/json
+      description: Menampilkan data Ground berdasarkan id
+      parameters:
+      - description: ID Ground
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Ground'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menampilkan data Ground berdasarkan id
+      tags:
+      - Ground
+    put:
+      consumes:
+      - application/json
+      description: Memperbarui data Ground berdasarkan id
+      parameters:
+      - description: ID Ground
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Data Ground
+        in: body
+        name: Ground
+        required: true
+        schema:
+          $ref: '#/definitions/model.GroundInput'
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Ground'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Memperbarui data Ground berdasarkan id
+      tags:
+      - Ground
   /perlengkapan:
     get:
       consumes:
@@ -533,175 +684,6 @@ paths:
       summary: Memperbarui data perlengkapan berdasarkan id
       tags:
       - Perlengkapan
-  /petak:
-    get:
-      consumes:
-      - application/json
-      description: Menampilkan semua data petak
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.SuccessResponseData'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/model.Petak'
-                  type: array
-              type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Menampilkan semua data petak
-      tags:
-      - Petak
-    post:
-      consumes:
-      - application/json
-      description: Membuat data petak baru
-      parameters:
-      - description: Data Petak
-        in: body
-        name: petak
-        required: true
-        schema:
-          $ref: '#/definitions/model.PetakInput'
-      - description: Bearer token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.SuccessResponseData'
-            - properties:
-                data:
-                  $ref: '#/definitions/model.Petak'
-              type: object
-        "422":
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Membuat data petak baru
-      tags:
-      - Petak
-  /petak/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Menghapus data petak berdasarkan id
-      parameters:
-      - description: ID Petak
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Bearer token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.SuccessResponseData'
-            - properties:
-                data:
-                  $ref: '#/definitions/model.Petak'
-              type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Menghapus data petak berdasarkan id
-      tags:
-      - Petak
-    get:
-      consumes:
-      - application/json
-      description: Menampilkan data petak berdasarkan id
-      parameters:
-      - description: ID Petak
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.SuccessResponseData'
-            - properties:
-                data:
-                  $ref: '#/definitions/model.Petak'
-              type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Menampilkan data petak berdasarkan id
-      tags:
-      - Petak
-    put:
-      consumes:
-      - application/json
-      description: Memperbarui data petak berdasarkan id
-      parameters:
-      - description: ID Petak
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Bearer token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: Data Petak
-        in: body
-        name: petak
-        required: true
-        schema:
-          $ref: '#/definitions/model.PetakInput'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.SuccessResponseData'
-            - properties:
-                data:
-                  $ref: '#/definitions/model.Petak'
-              type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Memperbarui data petak berdasarkan id
-      tags:
-      - Petak
   /user:
     get:
       consumes:

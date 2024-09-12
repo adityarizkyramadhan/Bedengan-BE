@@ -7,7 +7,6 @@ import (
 	"github.com/adityarizkyramadhan/template-go-mvc/repositories"
 	"github.com/adityarizkyramadhan/template-go-mvc/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 type User struct {
@@ -73,7 +72,7 @@ func (u *User) Login(ctx *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateToken(userData.ID.String(), userData.Email, userData.Role)
+	token, err := utils.GenerateToken(userData.ID, userData.Email, userData.Role)
 	if err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
@@ -104,10 +103,8 @@ func (u *User) Update(ctx *gin.Context) {
 	}
 	// Ambil uuid yang disimpan di context dari middleware JWT
 	claimsData := ctx.MustGet("id").(string)
-	// convert claimsData["id"] ke string dan ke uuid
-	userID := uuid.Must(uuid.Parse(claimsData))
 
-	userData, err := u.repoUser.Update(userID, user)
+	userData, err := u.repoUser.Update(claimsData, user)
 	if err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
@@ -128,7 +125,7 @@ func (u *User) Update(ctx *gin.Context) {
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /user [get]
 func (u *User) FindOne(ctx *gin.Context) {
-	id := uuid.Must(uuid.Parse(ctx.MustGet("id").(string)))
+	id := ctx.MustGet("id").(string)
 	user, err := u.repoUser.FindOne(id)
 	if err != nil {
 		_ = ctx.Error(err)

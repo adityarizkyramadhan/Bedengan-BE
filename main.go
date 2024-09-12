@@ -108,15 +108,15 @@ func main() {
 	perlengkapanRoutes := routes.NewPerlengkapanRoutes(perlengkapanController)
 	perlengkapanRoutes.SetupRoutes(v1)
 
+	repoGround := repositories.NewGroundRepository(db)
+	groundController := controller.NewGroundController(repoGround)
+	groundRoutes := routes.NewGroundRoutes(groundController)
+	groundRoutes.SetupRoutes(v1)
+
 	repoKavling := repositories.NewKavlingRepository(db)
 	kavlingController := controller.NewKavlingController(repoKavling)
 	kavlingRoutes := routes.NewKavlingRoutes(kavlingController)
 	kavlingRoutes.SetupRoutes(v1)
-
-	repoPetak := repositories.NewPetakRepository(db)
-	petakController := controller.NewPetakController(repoPetak)
-	petakRoutes := routes.NewPetakRoutes(petakController)
-	petakRoutes.SetupRoutes(v1)
 
 	// Setup server with context for graceful shutdown
 	srv := &http.Server{

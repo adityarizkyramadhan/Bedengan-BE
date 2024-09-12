@@ -18,9 +18,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/kavling": {
+        "/avling": {
             "get": {
-                "description": "Menampilkan semua data kavling",
+                "description": "Menampilkan semua data Kavling",
                 "consumes": [
                     "application/json"
                 ],
@@ -30,7 +30,7 @@ const docTemplate = `{
                 "tags": [
                     "Kavling"
                 ],
-                "summary": "Menampilkan semua data kavling",
+                "summary": "Menampilkan semua data Kavling",
                 "responses": {
                     "201": {
                         "description": "Created",
@@ -62,7 +62,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Membuat data kavling baru",
+                "description": "Membuat data Kavling baru",
                 "consumes": [
                     "application/json"
                 ],
@@ -72,11 +72,11 @@ const docTemplate = `{
                 "tags": [
                     "Kavling"
                 ],
-                "summary": "Membuat data kavling baru",
+                "summary": "Membuat data Kavling baru",
                 "parameters": [
                     {
                         "description": "Data Kavling",
-                        "name": "kavling",
+                        "name": "Kavling",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -125,9 +125,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/kavling/{id}": {
+        "/avling/{id}": {
             "get": {
-                "description": "Menampilkan data kavling berdasarkan id",
+                "description": "Menampilkan data Kavling berdasarkan id",
                 "consumes": [
                     "application/json"
                 ],
@@ -137,7 +137,7 @@ const docTemplate = `{
                 "tags": [
                     "Kavling"
                 ],
-                "summary": "Menampilkan data kavling berdasarkan id",
+                "summary": "Menampilkan data Kavling berdasarkan id",
                 "parameters": [
                     {
                         "type": "string",
@@ -175,7 +175,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Memperbarui data kavling berdasarkan id",
+                "description": "Memperbarui data Kavling berdasarkan id",
                 "consumes": [
                     "application/json"
                 ],
@@ -185,7 +185,7 @@ const docTemplate = `{
                 "tags": [
                     "Kavling"
                 ],
-                "summary": "Memperbarui data kavling berdasarkan id",
+                "summary": "Memperbarui data Kavling berdasarkan id",
                 "parameters": [
                     {
                         "type": "string",
@@ -195,13 +195,68 @@ const docTemplate = `{
                         "required": true
                     },
                     {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "Data Kavling",
-                        "name": "kavling",
+                        "name": "Kavling",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/model.KavlingInput"
                         }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Kavling"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Menghapus data Kavling berdasarkan id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kavling"
+                ],
+                "summary": "Menghapus data Kavling berdasarkan id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID Kavling",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     },
                     {
                         "type": "string",
@@ -230,6 +285,227 @@ const docTemplate = `{
                             ]
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/ground": {
+            "get": {
+                "description": "Menampilkan semua data Ground",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ground"
+                ],
+                "summary": "Menampilkan semua data Ground",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Ground"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Membuat data Ground baru",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ground"
+                ],
+                "summary": "Membuat data Ground baru",
+                "parameters": [
+                    {
+                        "description": "Data Ground",
+                        "name": "Ground",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.GroundInput"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Ground"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/ground/{id}": {
+            "get": {
+                "description": "Menampilkan data Ground berdasarkan id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ground"
+                ],
+                "summary": "Menampilkan data Ground berdasarkan id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID Ground",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Ground"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Memperbarui data Ground berdasarkan id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ground"
+                ],
+                "summary": "Memperbarui data Ground berdasarkan id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID Ground",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Data Ground",
+                        "name": "Ground",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.GroundInput"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Ground"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
@@ -245,7 +521,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Menghapus data kavling berdasarkan id",
+                "description": "Menghapus data Ground berdasarkan id",
                 "consumes": [
                     "application/json"
                 ],
@@ -253,13 +529,13 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Kavling"
+                    "Ground"
                 ],
-                "summary": "Menghapus data kavling berdasarkan id",
+                "summary": "Menghapus data Ground berdasarkan id",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "ID Kavling",
+                        "description": "ID Ground",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -272,12 +548,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Data Kavling",
-                        "name": "kavling",
+                        "description": "Data Ground",
+                        "name": "Ground",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.KavlingInput"
+                            "$ref": "#/definitions/model.GroundInput"
                         }
                     }
                 ],
@@ -293,7 +569,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/model.Kavling"
+                                            "$ref": "#/definitions/model.Ground"
                                         }
                                     }
                                 }
@@ -576,282 +852,6 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    }
-                }
-            }
-        },
-        "/petak": {
-            "get": {
-                "description": "Menampilkan semua data petak",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Petak"
-                ],
-                "summary": "Menampilkan semua data petak",
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.SuccessResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/model.Petak"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Membuat data petak baru",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Petak"
-                ],
-                "summary": "Membuat data petak baru",
-                "parameters": [
-                    {
-                        "description": "Data Petak",
-                        "name": "petak",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.PetakInput"
-                        }
-                    },
-                    {
-                        "type": "string",
-                        "description": "Bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.SuccessResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Petak"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    }
-                }
-            }
-        },
-        "/petak/{id}": {
-            "get": {
-                "description": "Menampilkan data petak berdasarkan id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Petak"
-                ],
-                "summary": "Menampilkan data petak berdasarkan id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID Petak",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.SuccessResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Petak"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Memperbarui data petak berdasarkan id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Petak"
-                ],
-                "summary": "Memperbarui data petak berdasarkan id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID Petak",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "Data Petak",
-                        "name": "petak",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.PetakInput"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.SuccessResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Petak"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Menghapus data petak berdasarkan id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Petak"
-                ],
-                "summary": "Menghapus data petak berdasarkan id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID Petak",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.SuccessResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Petak"
                                         }
                                     }
                                 }
@@ -1160,13 +1160,16 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "model.Kavling": {
+        "model.Ground": {
             "type": "object",
             "properties": {
                 "created_at": {
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "image_link": {
                     "type": "string"
                 },
                 "nama": {
@@ -1177,13 +1180,72 @@ const docTemplate = `{
                 }
             }
         },
-        "model.KavlingInput": {
+        "model.GroundInput": {
             "type": "object",
             "required": [
                 "nama"
             ],
             "properties": {
                 "nama": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Kavling": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "harga": {
+                    "description": "Sesuaikan tipe harga ke bigint",
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "jenis_tenda": {
+                    "type": "string"
+                },
+                "kavling_id": {
+                    "description": "Ganti dari uuid ke varchar(36)",
+                    "type": "string"
+                },
+                "nama": {
+                    "type": "string"
+                },
+                "status": {
+                    "description": "GORM default",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.KavlingInput": {
+            "type": "object",
+            "required": [
+                "harga",
+                "jenis_tenda",
+                "kavling_id",
+                "nama",
+                "status"
+            ],
+            "properties": {
+                "harga": {
+                    "type": "integer"
+                },
+                "jenis_tenda": {
+                    "type": "string"
+                },
+                "kavling_id": {
+                    "type": "string"
+                },
+                "nama": {
+                    "type": "string"
+                },
+                "status": {
                     "type": "string"
                 }
             }
@@ -1237,62 +1299,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Petak": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string"
-                },
-                "harga": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "jenis_tenda": {
-                    "type": "string"
-                },
-                "kavling_id": {
-                    "type": "string"
-                },
-                "nama": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.PetakInput": {
-            "type": "object",
-            "required": [
-                "harga",
-                "jenis_tenda",
-                "kavling_id",
-                "nama",
-                "status"
-            ],
-            "properties": {
-                "harga": {
-                    "type": "integer"
-                },
-                "jenis_tenda": {
-                    "type": "string"
-                },
-                "kavling_id": {
-                    "type": "string"
-                },
-                "nama": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
         "model.User": {
             "type": "object",
             "properties": {
@@ -1318,39 +1324,7 @@ const docTemplate = `{
             }
         },
         "model.UserCreate": {
-            "type": "object",
-            "required": [
-                "city",
-                "confirm_password",
-                "email",
-                "file_ktp",
-                "name",
-                "password",
-                "province"
-            ],
-            "properties": {
-                "city": {
-                    "type": "string"
-                },
-                "confirm_password": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "file_ktp": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "province": {
-                    "type": "string"
-                }
-            }
+            "type": "object"
         },
         "model.UserLogin": {
             "type": "object",

@@ -15,28 +15,30 @@ func NewKavlingController(repoKavling *repositories.Kavling) *Kavling {
 	return &Kavling{repoKavling}
 }
 
-// FindAll akan mengembalikan semua data kavling
-// @Summary      Menampilkan semua data kavling
-// @Description  Menampilkan semua data kavling
+// FindAll akan mengembalikan semua data Kavling
+// @Summary      Menampilkan semua data Kavling
+// @Description  Menampilkan semua data Kavling
 // @Tags         Kavling
 // @Accept       json
 // @Produce      json
+// @Params 		 id_Kavling query string false "ID Kavling"
 // @Success      201  {object}  utils.SuccessResponseData{data=[]model.Kavling}
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /kavling [get]
-func (kc *Kavling) FindAll(ctx *gin.Context) {
-	kavlings, err := kc.repoKavling.FindAll()
+func (pc *Kavling) FindAll(ctx *gin.Context) {
+	idKavling := ctx.Query("id_Kavling")
+	Kavlings, err := pc.repoKavling.FindAll(idKavling)
 	if err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
 		return
 	}
-	utils.SuccessResponse(ctx, 200, kavlings)
+	utils.SuccessResponse(ctx, 200, Kavlings)
 }
 
-// FindByID akan mengembalikan data kavling berdasarkan id
-// @Summary      Menampilkan data kavling berdasarkan id
-// @Description  Menampilkan data kavling berdasarkan id
+// FindByID akan mengembalikan data Kavling berdasarkan id
+// @Summary      Menampilkan data Kavling berdasarkan id
+// @Description  Menampilkan data Kavling berdasarkan id
 // @Tags         Kavling
 // @Accept       json
 // @Produce      json
@@ -44,96 +46,89 @@ func (kc *Kavling) FindAll(ctx *gin.Context) {
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Kavling}
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /kavling/{id} [get]
-func (kc *Kavling) FindByID(ctx *gin.Context) {
+func (pc *Kavling) FindByID(ctx *gin.Context) {
 	id := ctx.Param("id")
-	kavling, err := kc.repoKavling.FindByID(id)
+	Kavling, err := pc.repoKavling.FindByID(id)
 	if err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
 		return
 	}
-	utils.SuccessResponse(ctx, 200, kavling)
+	utils.SuccessResponse(ctx, 200, Kavling)
 }
 
-// Create akan membuat data kavling baru
-// @Summary      Membuat data kavling baru
-// @Description  Membuat data kavling baru
+// Create akan membuat data Kavling baru
+// @Summary      Membuat data Kavling baru
+// @Description  Membuat data Kavling baru
 // @Tags         Kavling
 // @Accept       json
 // @Produce      json
-// @Param        kavling     body    model.KavlingInput     true  "Data Kavling"
+// @Param        Kavling     body    model.KavlingInput     true  "Data Kavling"
 // @Param 		 Authorization header string true "Bearer token"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Kavling}
 // @Failure      422  {object}  utils.ErrorResponseData
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /kavling [post]
-func (kc *Kavling) Create(ctx *gin.Context) {
-	kavling := &model.KavlingInput{}
-	if err := ctx.ShouldBindJSON(kavling); err != nil {
+func (pc *Kavling) Create(ctx *gin.Context) {
+	Kavling := &model.KavlingInput{}
+	if err := ctx.ShouldBindJSON(Kavling); err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
 		return
 	}
-
-	if err := kc.repoKavling.Create(kavling); err != nil {
+	if err := pc.repoKavling.Create(Kavling); err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
 		return
 	}
-
-	utils.SuccessResponse(ctx, 201, kavling)
+	utils.SuccessResponse(ctx, 201, Kavling)
 }
 
-// Update akan memperbarui data kavling berdasarkan id
-// @Summary      Memperbarui data kavling berdasarkan id
-// @Description  Memperbarui data kavling berdasarkan id
+// Update akan memperbarui data Kavling berdasarkan id
+// @Summary      Memperbarui data Kavling berdasarkan id
+// @Description  Memperbarui data Kavling berdasarkan id
 // @Tags         Kavling
 // @Accept       json
 // @Produce      json
 // @Param        id     path    string     true  "ID Kavling"
-// @Param        kavling     body    model.KavlingInput     true  "Data Kavling"
 // @Param 		 Authorization header string true "Bearer token"
+// @Param        Kavling     body    model.KavlingInput     true  "Data Kavling"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Kavling}
-// @Failure      422  {object}  utils.ErrorResponseData
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /kavling/{id} [put]
-func (kc *Kavling) Update(ctx *gin.Context) {
+func (pc *Kavling) Update(ctx *gin.Context) {
 	id := ctx.Param("id")
-	kavling := &model.KavlingInput{}
-	if err := ctx.ShouldBindJSON(kavling); err != nil {
+	Kavling := &model.KavlingInput{}
+	if err := ctx.ShouldBindJSON(Kavling); err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
 		return
 	}
-
-	if err := kc.repoKavling.Update(id, kavling); err != nil {
+	if err := pc.repoKavling.Update(id, Kavling); err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
 		return
 	}
-
-	utils.SuccessResponse(ctx, 201, kavling)
+	utils.SuccessResponse(ctx, 201, Kavling)
 }
 
-// Delete akan menghapus data kavling berdasarkan id
-// @Summary      Menghapus data kavling berdasarkan id
-// @Description  Menghapus data kavling berdasarkan id
+// Delete akan menghapus data Kavling berdasarkan id
+// @Summary      Menghapus data Kavling berdasarkan id
+// @Description  Menghapus data Kavling berdasarkan id
 // @Tags         Kavling
 // @Accept       json
 // @Produce      json
 // @Param        id     path    string     true  "ID Kavling"
 // @Param 		 Authorization header string true "Bearer token"
-// @Param        kavling     body    model.KavlingInput     true  "Data Kavling"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Kavling}
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /kavling/{id} [delete]
-func (kc *Kavling) Delete(ctx *gin.Context) {
+func (pc *Kavling) Delete(ctx *gin.Context) {
 	id := ctx.Param("id")
-	if err := kc.repoKavling.Delete(id); err != nil {
+	if err := pc.repoKavling.Delete(id); err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
 		return
 	}
-
 	utils.SuccessResponse(ctx, 200, "Kavling berhasil dihapus")
 }

@@ -1,11 +1,11 @@
 package repositories
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/adityarizkyramadhan/template-go-mvc/model"
 	"github.com/adityarizkyramadhan/template-go-mvc/utils"
-	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -17,11 +17,11 @@ type (
 		redis *redis.Client
 	}
 	UserInterface interface {
-		FindOne(id uuid.UUID) (*model.User, error)
+		FindOne(id string) (*model.User, error)
 		FindEmail(email string) (*model.User, error)
 		Create(user *model.UserCreate) (*model.User, error)
-		Update(id uuid.UUID, user *model.UserUpdate) (*model.User, error)
-		Delete(id uuid.UUID) error
+		Update(id string, user *model.UserUpdate) (*model.User, error)
+		Delete(id string) error
 		Login(email, password string) (*model.User, error)
 		Logout(token string, expired time.Duration) error
 	}
@@ -33,7 +33,7 @@ func NewUserRepository(db *gorm.DB, redis *redis.Client) UserInterface {
 }
 
 // FindOne will return a user by id
-func (u *User) FindOne(id uuid.UUID) (*model.User, error) {
+func (u *User) FindOne(id string) (*model.User, error) {
 	var user model.User
 	if err := u.db.First(&user, id).Error; err != nil {
 		return nil, utils.NewError(utils.ErrNotFound, "user tidak ditemukan")
@@ -56,7 +56,10 @@ func (u *User) Create(user *model.UserCreate) (*model.User, error) {
 		return nil, utils.NewError(utils.ErrValidation, "password and confirm password must be the same")
 	}
 
-	id := uuid.New()
+	link, err := utils.SaveFile(user.FileKTP, fmt.Sprintf("public/images/%s", user.FileKTP.Filename))
+	if err != nil {
+		return nil, utils.NewError(utils.ErrUnknown, "gagal menyimpan file")
+	}
 
 	hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
@@ -64,11 +67,11 @@ func (u *User) Create(user *model.UserCreate) (*model.User, error) {
 	}
 
 	newUser := model.User{
-		ID:       id,
 		Name:     user.Name,
 		Email:    user.Email,
 		Password: string(hashPassword),
 		Role:     "user",
+		LinkKTP:  link,
 	}
 
 	var searchUser model.User
@@ -90,7 +93,7 @@ func (u *User) Create(user *model.UserCreate) (*model.User, error) {
 }
 
 // Update will update a user by id dengan check field yang tidak dirubah maka tidak diupdate
-func (u *User) Update(id uuid.UUID, user *model.UserUpdate) (*model.User, error) {
+func (u *User) Update(id string, user *model.UserUpdate) (*model.User, error) {
 	var oldUser model.User
 	if err := u.db.First(&oldUser, id).Error; err != nil {
 		return nil, utils.NewError(utils.ErrNotFound, "user tidak ditemukan")
@@ -105,7 +108,7 @@ func (u *User) Update(id uuid.UUID, user *model.UserUpdate) (*model.User, error)
 }
 
 // Delete will delete a user by id
-func (u *User) Delete(id uuid.UUID) error {
+func (u *User) Delete(id string) error {
 	if err := u.db.Delete(&model.User{}, id).Error; err != nil {
 		return utils.NewError(utils.ErrNotFound, "user tidak ditemukan")
 	}
