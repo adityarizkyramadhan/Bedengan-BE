@@ -64,7 +64,7 @@ const docTemplate = `{
             "post": {
                 "description": "Membuat data Ground baru",
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -75,13 +75,18 @@ const docTemplate = `{
                 "summary": "Membuat data Ground baru",
                 "parameters": [
                     {
-                        "description": "Data Ground",
-                        "name": "Ground",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.GroundInput"
-                        }
+                        "type": "string",
+                        "description": "Nama Ground",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Gambar Ground",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
                     },
                     {
                         "type": "string",
@@ -177,7 +182,7 @@ const docTemplate = `{
             "put": {
                 "description": "Memperbarui data Ground berdasarkan id",
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -195,13 +200,18 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Data Ground",
-                        "name": "Ground",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.GroundInput"
-                        }
+                        "type": "string",
+                        "description": "Nama Ground",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Gambar Ground",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
                     },
                     {
                         "type": "string",
@@ -1214,15 +1224,7 @@ const docTemplate = `{
             }
         },
         "model.GroundInput": {
-            "type": "object",
-            "required": [
-                "nama"
-            ],
-            "properties": {
-                "nama": {
-                    "type": "string"
-                }
-            }
+            "type": "object"
         },
         "model.Kavling": {
             "type": "object",

@@ -14,11 +14,6 @@ definitions:
         type: string
     type: object
   model.GroundInput:
-    properties:
-      nama:
-        type: string
-    required:
-    - nama
     type: object
   model.Kavling:
     properties:
@@ -193,15 +188,19 @@ paths:
       - Ground
     post:
       consumes:
-      - application/json
+      - multipart/form-data
       description: Membuat data Ground baru
       parameters:
-      - description: Data Ground
-        in: body
-        name: Ground
+      - description: Nama Ground
+        in: formData
+        name: name
         required: true
-        schema:
-          $ref: '#/definitions/model.GroundInput'
+        type: string
+      - description: Gambar Ground
+        in: formData
+        name: image
+        required: true
+        type: file
       - description: Bearer token
         in: header
         name: Authorization
@@ -302,7 +301,7 @@ paths:
       - Ground
     put:
       consumes:
-      - application/json
+      - multipart/form-data
       description: Memperbarui data Ground berdasarkan id
       parameters:
       - description: ID Ground
@@ -310,12 +309,16 @@ paths:
         name: id
         required: true
         type: string
-      - description: Data Ground
-        in: body
-        name: Ground
+      - description: Nama Ground
+        in: formData
+        name: name
         required: true
-        schema:
-          $ref: '#/definitions/model.GroundInput'
+        type: string
+      - description: Gambar Ground
+        in: formData
+        name: image
+        required: true
+        type: file
       - description: Bearer token
         in: header
         name: Authorization
