@@ -27,7 +27,7 @@ import (
 // @title           Islamind API
 // @version         1.0
 // @description     This is API documentation for Islamind. You can use the API with the following hosts:
-// @description     - Production: `api.perkemahanbedengan.com`
+// @description     - Production: api.perkemahanbedengan.com
 // @contact.name    Aditya Rizky Ramadhan
 // @contact.email   adityarizky1020@gmail.com
 // @host            api.perkemahanbedengan.com
@@ -117,6 +117,9 @@ func main() {
 	kavlingController := controller.NewKavlingController(repoKavling)
 	kavlingRoutes := routes.NewKavlingRoutes(kavlingController)
 	kavlingRoutes.SetupRoutes(v1)
+
+	// Serve static files from the "storage/public" directory
+	router.Static("/api/v1/storage/public", "./storage/public")
 
 	// Setup server with context for graceful shutdown
 	srv := &http.Server{

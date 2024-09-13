@@ -56,7 +56,7 @@ func SaveFile(file *multipart.FileHeader, path string) (string, error) {
 		return "", err
 	}
 
-	baseLink := fmt.Sprintf("%s/api/v1/storage/%s?filename=%s", os.Getenv("BASE_URL"), path, file.Filename)
+	baseLink := fmt.Sprintf("%s/api/v1/storage/%s/%s", os.Getenv("BASE_URL"), path, file.Filename)
 
 	return baseLink, nil
 }

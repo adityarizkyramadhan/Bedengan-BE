@@ -10,8 +10,9 @@ import (
 type Kavling struct {
 	ID         string         `json:"id" gorm:"type:varchar(36);primary_key"`
 	Nama       string         `json:"nama" gorm:"type:varchar(255);not null"`
-	KavlingID  string         `json:"kavling_id" gorm:"type:varchar(36);not null"` // Ganti dari uuid ke varchar(36)
-	Harga      int            `json:"harga" gorm:"type:bigint;not null"`           // Sesuaikan tipe harga ke bigint
+	GroundID   string         `json:"ground_id" gorm:"type:varchar(36);not null"`
+	Ground     Ground         `json:"ground" gorm:"foreignKey:GroundID;references:ID"`
+	Harga      int            `json:"harga" gorm:"type:bigint;not null"` // Sesuaikan tipe harga ke bigint
 	JenisTenda string         `json:"jenis_tenda" gorm:"type:text;not null"`
 	Status     string         `json:"status" gorm:"type:text;not null;default:'tersedia'"` // GORM default
 	CreatedAt  time.Time      `json:"created_at"`
@@ -43,7 +44,7 @@ func (p *Kavling) BeforeSave() error {
 
 type KavlingInput struct {
 	Nama       string `json:"nama" binding:"required"`
-	KavlingID  string `json:"kavling_id" binding:"required"`
+	GroundID   string `json:"ground_id" binding:"required"`
 	Harga      int    `json:"harga" binding:"required"`
 	JenisTenda string `json:"jenis_tenda" binding:"required"`
 	Status     string `json:"status" binding:"required"`
@@ -52,7 +53,7 @@ type KavlingInput struct {
 func (p *KavlingInput) ToKavling() *Kavling {
 	return &Kavling{
 		Nama:       p.Nama,
-		KavlingID:  p.KavlingID,
+		GroundID:   p.GroundID,
 		Harga:      p.Harga,
 		JenisTenda: p.JenisTenda,
 		Status:     p.Status,

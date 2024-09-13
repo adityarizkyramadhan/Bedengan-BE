@@ -27,7 +27,7 @@ type User struct {
 	// UpdatedAt menandakan waktu user terakhir diupdate
 	UpdatedAt time.Time `json:"-" gorm:"type:timestamp;default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"`
 	// DeletedAt menandakan waktu user dihapus
-	DeletedAt gorm.DeletedAt `json:"-" gorm:"type:timestamp"`
+	DeletedAt gorm.DeletedAt `json:"-"`
 }
 
 func (u User) TableName() string {
