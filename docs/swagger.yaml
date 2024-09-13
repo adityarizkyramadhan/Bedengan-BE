@@ -108,6 +108,9 @@ definitions:
       name:
         description: Name tidak boleh kosong
         type: string
+      phone:
+        description: Phone merupakan nomor telepon yang tidak boleh kosong
+        type: string
       role:
         description: Role merupakan enum yang berisi "admin" dan "user" dan not null
         type: string
@@ -851,6 +854,16 @@ paths:
         name: confirm_password
         required: true
         type: string
+      - description: Phone number
+        in: formData
+        name: phone
+        required: true
+        type: string
+      - description: KTP file
+        in: formData
+        name: file_ktp
+        required: true
+        type: file
       produces:
       - application/json
       responses:

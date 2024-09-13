@@ -1135,6 +1135,20 @@
                         "name": "confirm_password",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Phone number",
+                        "name": "phone",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "KTP file",
+                        "name": "file_ktp",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1330,6 +1344,10 @@
                 },
                 "name": {
                     "description": "Name tidak boleh kosong",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "Phone merupakan nomor telepon yang tidak boleh kosong",
                     "type": "string"
                 },
                 "role": {
