@@ -11,7 +11,6 @@ type Kavling struct {
 	ID         string         `json:"id" gorm:"type:varchar(36);primaryKey;default:(UUID())"`
 	Nama       string         `json:"nama" gorm:"type:varchar(255);not null"`
 	GroundID   string         `json:"ground_id" gorm:"type:varchar(36);not null"`
-	Ground     Ground         `json:"ground" gorm:"foreignKey:GroundID;references:ID"`
 	Harga      int            `json:"harga" gorm:"type:bigint;not null"` // Sesuaikan tipe harga ke bigint
 	JenisTenda string         `json:"jenis_tenda" gorm:"type:text;not null"`
 	Status     string         `json:"status" gorm:"type:text;not null;default:'tersedia'"` // GORM default

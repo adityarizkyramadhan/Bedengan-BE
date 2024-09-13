@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"github.com/adityarizkyramadhan/template-go-mvc/model"
+	"github.com/adityarizkyramadhan/template-go-mvc/utils"
 	"gorm.io/gorm"
 )
 
@@ -15,8 +16,11 @@ func NewKavlingRepository(db *gorm.DB) *Kavling {
 
 func (p *Kavling) FindAll(idKavling string) ([]model.Kavling, error) {
 	var Kavlings []model.Kavling
-	if err := p.db.Find(&Kavlings, "id_Kavling = ?", idKavling).Error; err != nil {
+	if err := p.db.Find(&Kavlings, "ground_id = ?", idKavling).Error; err != nil {
 		return nil, err
+	}
+	if len(Kavlings) == 0 {
+		return nil, utils.NewError(utils.ErrNotFound, "Kavling tidak ditemukan")
 	}
 	return Kavlings, nil
 }
@@ -29,15 +33,20 @@ func (p *Kavling) FindByID(id string) (*model.Kavling, error) {
 	return &Kavling, nil
 }
 
-func (p *Kavling) Create(Kavling *model.KavlingInput) error {
-	if err := p.db.Create(Kavling.ToKavling()).Error; err != nil {
-		return err
+func (p *Kavling) Create(Kavling *model.KavlingInput) (*model.Kavling, error) {
+	kavlingData := Kavling.ToKavling()
+	kavlingData.BeforeCreate()
+	if err := p.db.Create(kavlingData).Error; err != nil {
+		return nil, utils.NewError(utils.ErrBadRequest, "gagal membuat Kavling")
 	}
-	return nil
+	return kavlingData, nil
 }
 
 func (p *Kavling) Update(id string, Kavling *model.KavlingInput) error {
-	if err := p.db.Model(&model.Kavling{}).Where("id = ?", id).Updates(Kavling.ToKavling()).Error; err != nil {
+	kavling := Kavling.ToKavling()
+	kavling.BeforeSave()
+	kavling.ID = id
+	if err := p.db.Model(&model.Kavling{}).Where("id = ?", id).Updates(kavling).Error; err != nil {
 		return err
 	}
 	return nil

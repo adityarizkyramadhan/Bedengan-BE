@@ -21,12 +21,12 @@ func NewKavlingController(repoKavling *repositories.Kavling) *Kavling {
 // @Tags         Kavling
 // @Accept       json
 // @Produce      json
-// @Params 		 id_Kavling query string false "ID Kavling"
+// @Params 		 ground_id query string false "ID Kavling"
 // @Success      201  {object}  utils.SuccessResponseData{data=[]model.Kavling}
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /kavling [get]
 func (pc *Kavling) FindAll(ctx *gin.Context) {
-	idKavling := ctx.Query("id_Kavling")
+	idKavling := ctx.Query("ground_id")
 	Kavlings, err := pc.repoKavling.FindAll(idKavling)
 	if err != nil {
 		_ = ctx.Error(err)
@@ -76,12 +76,13 @@ func (pc *Kavling) Create(ctx *gin.Context) {
 		ctx.Next()
 		return
 	}
-	if err := pc.repoKavling.Create(Kavling); err != nil {
+	kavling, err := pc.repoKavling.Create(Kavling)
+	if err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
 		return
 	}
-	utils.SuccessResponse(ctx, 201, Kavling)
+	utils.SuccessResponse(ctx, 201, kavling)
 }
 
 // Update akan memperbarui data Kavling berdasarkan id
