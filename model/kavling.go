@@ -8,7 +8,7 @@ import (
 )
 
 type Kavling struct {
-	ID         string         `json:"id" gorm:"type:varchar(36);primary_key"`
+	ID         string         `json:"id" gorm:"type:varchar(36);primaryKey;default:(UUID())"`
 	Nama       string         `json:"nama" gorm:"type:varchar(255);not null"`
 	GroundID   string         `json:"ground_id" gorm:"type:varchar(36);not null"`
 	Ground     Ground         `json:"ground" gorm:"foreignKey:GroundID;references:ID"`
@@ -26,11 +26,7 @@ func (p *Kavling) TableName() string {
 
 // BeforeCreate will set a UUID rather than numeric ID.
 func (p *Kavling) BeforeCreate() error {
-	id, err := uuid.NewV6()
-	if err != nil {
-		return err
-	}
-	p.ID = id.String()
+	p.ID = uuid.New().String()
 	p.CreatedAt = time.Now()
 	p.UpdatedAt = time.Now()
 	return nil

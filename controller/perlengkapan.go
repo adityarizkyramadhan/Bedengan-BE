@@ -52,7 +52,7 @@ func (pc *Perlengkapan) FindByID(ctx *gin.Context) {
 		ctx.Next()
 		return
 	}
-	ctx.JSON(200, perlengkapan)
+	utils.SuccessResponse(ctx, 200, perlengkapan)
 }
 
 // Create akan membuat data perlengkapan baru
@@ -75,13 +75,13 @@ func (pc *Perlengkapan) Create(ctx *gin.Context) {
 		return
 	}
 
-	err := pc.repoPerlengkapan.Create(perlengkapan)
+	perlengkapanData, err := pc.repoPerlengkapan.Create(perlengkapan)
 	if err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
 		return
 	}
-	ctx.JSON(201, perlengkapan)
+	utils.SuccessResponse(ctx, 201, perlengkapanData)
 }
 
 // Update akan memperbarui data perlengkapan berdasarkan id
@@ -106,13 +106,13 @@ func (pc *Perlengkapan) Update(ctx *gin.Context) {
 		return
 	}
 
-	err := pc.repoPerlengkapan.Update(id, perlengkapan)
+	perlengkapanData, err := pc.repoPerlengkapan.Update(id, perlengkapan)
 	if err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
 		return
 	}
-	ctx.JSON(200, perlengkapan)
+	utils.SuccessResponse(ctx, 200, perlengkapanData)
 }
 
 // Delete akan menghapus data perlengkapan berdasarkan id
@@ -134,5 +134,5 @@ func (pc *Perlengkapan) Delete(ctx *gin.Context) {
 		ctx.Next()
 		return
 	}
-	ctx.JSON(200, gin.H{"message": "perlengkapan berhasil dihapus"})
+	utils.SuccessResponse(ctx, 200, "perlengkapan berhasil dihapus")
 }

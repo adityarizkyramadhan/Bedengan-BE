@@ -8,7 +8,7 @@ import (
 )
 
 type Perlengkapan struct {
-	ID        string         `json:"id" gorm:"type:varchar(36);primary_key"`
+	ID        string         `json:"id" gorm:"type:varchar(36);primaryKey;default:(UUID())"`
 	Nama      string         `json:"nama" gorm:"type:varchar(255);not null"`
 	Deskripsi string         `json:"deskripsi" gorm:"type:text;not null"`
 	Harga     int            `json:"harga" gorm:"type:int;not null"`
@@ -24,11 +24,7 @@ func (p *Perlengkapan) TableName() string {
 
 // BeforeCreate will set a UUID rather than numeric ID.
 func (p *Perlengkapan) BeforeCreate() error {
-	id, err := uuid.NewV6()
-	if err != nil {
-		return err
-	}
-	p.ID = id.String()
+	p.ID = uuid.New().String()
 	p.CreatedAt = time.Now()
 	p.UpdatedAt = time.Now()
 	return nil

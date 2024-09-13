@@ -22,11 +22,7 @@ func (k *Ground) TableName() string {
 
 // BeforeCreate will set a UUID rather than numeric ID.
 func (k *Ground) BeforeCreate() error {
-	id, err := uuid.NewV6()
-	if err != nil {
-		return err
-	}
-	k.ID = id.String()
+	k.ID = uuid.New().String()
 	k.CreatedAt = time.Now()
 	k.UpdatedAt = time.Now()
 	return nil
