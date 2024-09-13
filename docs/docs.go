@@ -1232,9 +1232,6 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string"
                 },
-                "ground": {
-                    "$ref": "#/definitions/model.Ground"
-                },
                 "ground_id": {
                     "type": "string"
                 },
