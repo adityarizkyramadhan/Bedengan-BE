@@ -22,6 +22,8 @@ type User struct {
 	Password string `json:"-" gorm:"type:text;not null"`
 	// Link KTP merupakan link ke file KTP
 	LinkKTP string `json:"link_ktp" gorm:"type:text"`
+	// Phone merupakan nomor telepon yang tidak boleh kosong
+	Phone string `json:"phone" gorm:"type:varchar(255);not null"`
 	// CreatedAt menandakan waktu user dibuat
 	CreatedAt time.Time `json:"-" gorm:"type:timestamp;default:CURRENT_TIMESTAMP"`
 	// UpdatedAt menandakan waktu user terakhir diupdate
@@ -50,6 +52,7 @@ type UserCreate struct {
 	Email           string                `form:"email" binding:"required,email"`
 	Name            string                `form:"name" binding:"required"`
 	Password        string                `form:"password" binding:"required"`
+	Phone           string                `form:"phone" binding:"required"`
 	ConfirmPassword string                `form:"confirm_password" binding:"required,eqfield=Password"`
 	FileKTP         *multipart.FileHeader `form:"file_ktp" binding:"required"`
 }

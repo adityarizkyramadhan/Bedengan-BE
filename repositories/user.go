@@ -70,6 +70,7 @@ func (u *User) Create(user *model.UserCreate) (*model.User, error) {
 		Email:    user.Email,
 		Password: string(hashPassword),
 		Role:     "user",
+		Phone:    user.Phone,
 	}
 
 	tx := u.db.Begin()

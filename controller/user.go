@@ -28,6 +28,8 @@ func NewUserController(repoUser repositories.UserInterface) *User {
 // @Param        name            formData string true "Full name"
 // @Param        password        formData string true "Password"
 // @Param        confirm_password formData string true "Confirm password"
+// @Param        phone           formData string true "Phone number"
+// @Param        file_ktp        formData file   true "KTP file"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.User}
 // @Failure      422  {object}  utils.ErrorResponseData
 // @Failure      500  {object}  utils.ErrorResponseData
