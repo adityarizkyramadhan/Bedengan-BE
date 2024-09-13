@@ -16,9 +16,9 @@ func NewGroundRoutes(ctrlGround *controller.Ground) *Ground {
 
 // SetupRoutes will setup the routes for Ground
 func (k *Ground) SetupRoutes(router *gin.RouterGroup) {
-	router.GET("/round", k.ctrlGround.FindAll)
-	router.GET("/round/:id", k.ctrlGround.FindByID)
-	router.POST("/round", middleware.JWTMiddleware([]string{"admin"}), k.ctrlGround.Create)
-	router.PUT("/round/:id", middleware.JWTMiddleware([]string{"admin"}), k.ctrlGround.Update)
-	router.DELETE("/round/:id", middleware.JWTMiddleware([]string{"admin"}), k.ctrlGround.Delete)
+	router.GET("/ground", k.ctrlGround.FindAll)
+	router.GET("/ground/:id", k.ctrlGround.FindByID)
+	router.POST("/ground", middleware.JWTMiddleware([]string{"admin"}), k.ctrlGround.Create)
+	router.PUT("/ground/:id", middleware.JWTMiddleware([]string{"admin"}), k.ctrlGround.Update)
+	router.DELETE("/ground/:id", middleware.JWTMiddleware([]string{"admin"}), k.ctrlGround.Delete)
 }

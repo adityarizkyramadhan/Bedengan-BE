@@ -19,6 +19,9 @@ func (k *Ground) FindAll() ([]model.Ground, error) {
 	if err := k.db.Find(&Grounds).Error; err != nil {
 		return nil, utils.NewError(utils.ErrNotFound, "Ground tidak ditemukan")
 	}
+	if len(Grounds) == 0 {
+		return nil, utils.NewError(utils.ErrNotFound, "Ground tidak ditemukan")
+	}
 	return Grounds, nil
 }
 
@@ -30,23 +33,41 @@ func (k *Ground) FindByID(id string) (*model.Ground, error) {
 	return &Ground, nil
 }
 
-func (k *Ground) Create(Ground *model.GroundInput) error {
-	if err := k.db.Create(Ground.ToGround()).Error; err != nil {
-		return utils.NewError(utils.ErrInternalServer, "gagal membuat Ground")
+func (k *Ground) Create(Ground *model.GroundInput) (*model.Ground, error) {
+	groundData := Ground.ToGround()
+	groundData.BeforeCreate()
+
+	link, err := utils.SaveFile(Ground.Image, "public/ground")
+	if err != nil {
+		return nil, utils.NewError(utils.ErrBadRequest, "gagal membuat Ground")
 	}
-	return nil
+
+	groundData.ImageLink = link
+
+	if err := k.db.Create(groundData).Error; err != nil {
+		return nil, utils.NewError(utils.ErrBadRequest, "gagal membuat Ground")
+	}
+	return groundData, nil
 }
 
-func (k *Ground) Update(id string, Ground *model.GroundInput) error {
-	if err := k.db.Model(&model.Ground{}).Where("id = ?", id).Updates(Ground.ToGround()).Error; err != nil {
-		return utils.NewError(utils.ErrInternalServer, "gagal memperbarui Ground")
+func (k *Ground) Update(id string, Ground *model.GroundInput) (*model.Ground, error) {
+	groundData := Ground.ToGround()
+	groundData.BeforeSave()
+	groundData.ID = id
+	link, err := utils.SaveFile(Ground.Image, "public/ground")
+	if err != nil {
+		return nil, utils.NewError(utils.ErrBadRequest, "gagal membuat Ground")
 	}
-	return nil
+	groundData.ImageLink = link
+	if err := k.db.Model(&model.Ground{}).Where("id = ?", id).Updates(groundData).Error; err != nil {
+		return nil, utils.NewError(utils.ErrBadRequest, "gagal memperbarui Ground")
+	}
+	return groundData, nil
 }
 
 func (k *Ground) Delete(id string) error {
 	if err := k.db.Delete(&model.Ground{}, "id = ?", id).Error; err != nil {
-		return utils.NewError(utils.ErrInternalServer, "gagal menghapus Ground")
+		return utils.NewError(utils.ErrBadRequest, "gagal menghapus Ground")
 	}
 	return nil
 }

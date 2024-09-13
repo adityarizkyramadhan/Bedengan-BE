@@ -1,6 +1,7 @@
 package model
 
 import (
+	"mime/multipart"
 	"time"
 
 	"github.com/google/uuid"
@@ -35,7 +36,8 @@ func (k *Ground) BeforeSave() error {
 }
 
 type GroundInput struct {
-	Nama string `json:"nama" binding:"required"`
+	Nama  string                `form:"nama" binding:"required"`
+	Image *multipart.FileHeader `form:"image" binding:"required"`
 }
 
 func (k *GroundInput) ToGround() *Ground {
