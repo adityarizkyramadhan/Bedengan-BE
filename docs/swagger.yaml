@@ -24,15 +24,16 @@ definitions:
     properties:
       created_at:
         type: string
+      ground:
+        $ref: '#/definitions/model.Ground'
+      ground_id:
+        type: string
       harga:
         description: Sesuaikan tipe harga ke bigint
         type: integer
       id:
         type: string
       jenis_tenda:
-        type: string
-      kavling_id:
-        description: Ganti dari uuid ke varchar(36)
         type: string
       nama:
         type: string
@@ -44,20 +45,20 @@ definitions:
     type: object
   model.KavlingInput:
     properties:
+      ground_id:
+        type: string
       harga:
         type: integer
       jenis_tenda:
-        type: string
-      kavling_id:
         type: string
       nama:
         type: string
       status:
         type: string
     required:
+    - ground_id
     - harga
     - jenis_tenda
-    - kavling_id
     - nama
     - status
     type: object
@@ -111,8 +112,6 @@ definitions:
         description: Role merupakan enum yang berisi "admin" dan "user" dan not null
         type: string
     type: object
-  model.UserCreate:
-    type: object
   model.UserLogin:
     properties:
       email:
@@ -159,179 +158,10 @@ info:
     name: Aditya Rizky Ramadhan
   description: |-
     This is API documentation for Islamind. You can use the API with the following hosts:
-    - Production: `api.perkemahanbedengan.com`
+    - Production: api.perkemahanbedengan.com
   title: Islamind API
   version: "1.0"
 paths:
-  /avling:
-    get:
-      consumes:
-      - application/json
-      description: Menampilkan semua data Kavling
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.SuccessResponseData'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/model.Kavling'
-                  type: array
-              type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Menampilkan semua data Kavling
-      tags:
-      - Kavling
-    post:
-      consumes:
-      - application/json
-      description: Membuat data Kavling baru
-      parameters:
-      - description: Data Kavling
-        in: body
-        name: Kavling
-        required: true
-        schema:
-          $ref: '#/definitions/model.KavlingInput'
-      - description: Bearer token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.SuccessResponseData'
-            - properties:
-                data:
-                  $ref: '#/definitions/model.Kavling'
-              type: object
-        "422":
-          description: Unprocessable Entity
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Membuat data Kavling baru
-      tags:
-      - Kavling
-  /avling/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Menghapus data Kavling berdasarkan id
-      parameters:
-      - description: ID Kavling
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Bearer token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.SuccessResponseData'
-            - properties:
-                data:
-                  $ref: '#/definitions/model.Kavling'
-              type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Menghapus data Kavling berdasarkan id
-      tags:
-      - Kavling
-    get:
-      consumes:
-      - application/json
-      description: Menampilkan data Kavling berdasarkan id
-      parameters:
-      - description: ID Kavling
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.SuccessResponseData'
-            - properties:
-                data:
-                  $ref: '#/definitions/model.Kavling'
-              type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Menampilkan data Kavling berdasarkan id
-      tags:
-      - Kavling
-    put:
-      consumes:
-      - application/json
-      description: Memperbarui data Kavling berdasarkan id
-      parameters:
-      - description: ID Kavling
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Bearer token
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: Data Kavling
-        in: body
-        name: Kavling
-        required: true
-        schema:
-          $ref: '#/definitions/model.KavlingInput'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            allOf:
-            - $ref: '#/definitions/utils.SuccessResponseData'
-            - properties:
-                data:
-                  $ref: '#/definitions/model.Kavling'
-              type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorResponseData'
-      summary: Memperbarui data Kavling berdasarkan id
-      tags:
-      - Kavling
   /ground:
     get:
       consumes:
@@ -511,6 +341,175 @@ paths:
       summary: Memperbarui data Ground berdasarkan id
       tags:
       - Ground
+  /kavling:
+    get:
+      consumes:
+      - application/json
+      description: Menampilkan semua data Kavling
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.Kavling'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menampilkan semua data Kavling
+      tags:
+      - Kavling
+    post:
+      consumes:
+      - application/json
+      description: Membuat data Kavling baru
+      parameters:
+      - description: Data Kavling
+        in: body
+        name: Kavling
+        required: true
+        schema:
+          $ref: '#/definitions/model.KavlingInput'
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Kavling'
+              type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Membuat data Kavling baru
+      tags:
+      - Kavling
+  /kavling/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Menghapus data Kavling berdasarkan id
+      parameters:
+      - description: ID Kavling
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Kavling'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menghapus data Kavling berdasarkan id
+      tags:
+      - Kavling
+    get:
+      consumes:
+      - application/json
+      description: Menampilkan data Kavling berdasarkan id
+      parameters:
+      - description: ID Kavling
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Kavling'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menampilkan data Kavling berdasarkan id
+      tags:
+      - Kavling
+    put:
+      consumes:
+      - application/json
+      description: Memperbarui data Kavling berdasarkan id
+      parameters:
+      - description: ID Kavling
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Data Kavling
+        in: body
+        name: Kavling
+        required: true
+        schema:
+          $ref: '#/definitions/model.KavlingInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Kavling'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Memperbarui data Kavling berdasarkan id
+      tags:
+      - Kavling
   /perlengkapan:
     get:
       consumes:
@@ -832,12 +831,26 @@ paths:
       - multipart/form-data
       description: Register new user
       parameters:
-      - description: User data
-        in: body
-        name: request
+      - description: Email address
+        in: formData
+        name: email
         required: true
-        schema:
-          $ref: '#/definitions/model.UserCreate'
+        type: string
+      - description: Full name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: Confirm password
+        in: formData
+        name: confirm_password
+        required: true
+        type: string
       produces:
       - application/json
       responses:

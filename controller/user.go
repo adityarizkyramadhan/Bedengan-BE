@@ -24,7 +24,10 @@ func NewUserController(repoUser repositories.UserInterface) *User {
 // @Tags         User
 // @Accept       multipart/form-data
 // @Produce      json
-// @Param 		 request  body  model.UserCreate true "User data"
+// @Param        email           formData string true "Email address"
+// @Param        name            formData string true "Full name"
+// @Param        password        formData string true "Password"
+// @Param        confirm_password formData string true "Confirm password"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.User}
 // @Failure      422  {object}  utils.ErrorResponseData
 // @Failure      500  {object}  utils.ErrorResponseData

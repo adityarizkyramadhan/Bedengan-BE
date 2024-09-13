@@ -18,282 +18,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/avling": {
-            "get": {
-                "description": "Menampilkan semua data Kavling",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Kavling"
-                ],
-                "summary": "Menampilkan semua data Kavling",
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.SuccessResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/model.Kavling"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Membuat data Kavling baru",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Kavling"
-                ],
-                "summary": "Membuat data Kavling baru",
-                "parameters": [
-                    {
-                        "description": "Data Kavling",
-                        "name": "Kavling",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.KavlingInput"
-                        }
-                    },
-                    {
-                        "type": "string",
-                        "description": "Bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.SuccessResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Kavling"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    }
-                }
-            }
-        },
-        "/avling/{id}": {
-            "get": {
-                "description": "Menampilkan data Kavling berdasarkan id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Kavling"
-                ],
-                "summary": "Menampilkan data Kavling berdasarkan id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID Kavling",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.SuccessResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Kavling"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Memperbarui data Kavling berdasarkan id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Kavling"
-                ],
-                "summary": "Memperbarui data Kavling berdasarkan id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID Kavling",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "Data Kavling",
-                        "name": "Kavling",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.KavlingInput"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.SuccessResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Kavling"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Menghapus data Kavling berdasarkan id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Kavling"
-                ],
-                "summary": "Menghapus data Kavling berdasarkan id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID Kavling",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Bearer token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/utils.SuccessResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/model.Kavling"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorResponseData"
-                        }
-                    }
-                }
-            }
-        },
         "/ground": {
             "get": {
                 "description": "Menampilkan semua data Ground",
@@ -570,6 +294,282 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/model.Ground"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/kavling": {
+            "get": {
+                "description": "Menampilkan semua data Kavling",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kavling"
+                ],
+                "summary": "Menampilkan semua data Kavling",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Kavling"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Membuat data Kavling baru",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kavling"
+                ],
+                "summary": "Membuat data Kavling baru",
+                "parameters": [
+                    {
+                        "description": "Data Kavling",
+                        "name": "Kavling",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.KavlingInput"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Kavling"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/kavling/{id}": {
+            "get": {
+                "description": "Menampilkan data Kavling berdasarkan id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kavling"
+                ],
+                "summary": "Menampilkan data Kavling berdasarkan id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID Kavling",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Kavling"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Memperbarui data Kavling berdasarkan id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kavling"
+                ],
+                "summary": "Memperbarui data Kavling berdasarkan id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID Kavling",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Data Kavling",
+                        "name": "Kavling",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.KavlingInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Kavling"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Menghapus data Kavling berdasarkan id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Kavling"
+                ],
+                "summary": "Menghapus data Kavling berdasarkan id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID Kavling",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.Kavling"
                                         }
                                     }
                                 }
@@ -1115,13 +1115,32 @@ const docTemplate = `{
                 "summary": "Register new user",
                 "parameters": [
                     {
-                        "description": "User data",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.UserCreate"
-                        }
+                        "type": "string",
+                        "description": "Email address",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Full name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Password",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Confirm password",
+                        "name": "confirm_password",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1197,6 +1216,12 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string"
                 },
+                "ground": {
+                    "$ref": "#/definitions/model.Ground"
+                },
+                "ground_id": {
+                    "type": "string"
+                },
                 "harga": {
                     "description": "Sesuaikan tipe harga ke bigint",
                     "type": "integer"
@@ -1205,10 +1230,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "jenis_tenda": {
-                    "type": "string"
-                },
-                "kavling_id": {
-                    "description": "Ganti dari uuid ke varchar(36)",
                     "type": "string"
                 },
                 "nama": {
@@ -1226,20 +1247,20 @@ const docTemplate = `{
         "model.KavlingInput": {
             "type": "object",
             "required": [
+                "ground_id",
                 "harga",
                 "jenis_tenda",
-                "kavling_id",
                 "nama",
                 "status"
             ],
             "properties": {
+                "ground_id": {
+                    "type": "string"
+                },
                 "harga": {
                     "type": "integer"
                 },
                 "jenis_tenda": {
-                    "type": "string"
-                },
-                "kavling_id": {
                     "type": "string"
                 },
                 "nama": {
@@ -1323,9 +1344,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.UserCreate": {
-            "type": "object"
-        },
         "model.UserLogin": {
             "type": "object",
             "required": [
@@ -1389,7 +1407,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Islamind API",
-	Description:      "This is API documentation for Islamind. You can use the API with the following hosts:\n- Production: `api.perkemahanbedengan.com`",
+	Description:      "This is API documentation for Islamind. You can use the API with the following hosts:\n- Production: api.perkemahanbedengan.com",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
