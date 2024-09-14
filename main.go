@@ -32,7 +32,7 @@ import (
 // @contact.email   adityarizky1020@gmail.com
 // @host            api.perkemahanbedengan.com
 // @BasePath        /api/v1
-// @Server api.perkemahanbedengan.com Production server
+// @Server 					api.perkemahanbedengan.com Production server
 func main() {
 
 	err := godotenv.Load()
