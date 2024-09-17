@@ -1,6 +1,8 @@
 package model
 
 import (
+	"errors"
+	"fmt"
 	"time"
 
 	"github.com/adityarizkyramadhan/template-go-mvc/utils"
@@ -17,8 +19,8 @@ type InvoiceReservasi struct {
 	Total             int            `json:"total"`
 	LinkPembayaran    string         `json:"link_pembayaran"`
 	LinkPerizinan     string         `json:"link_perizinan"`
-	Status            string         `json:"status"`
-	Jumlah            int            `json:"jumlah"`
+	Jumlah            int            `json:"jumlah" gorm:"default:0"`
+	Status            string         `json:"status" gorm:"type:text;default:'menunggu_pembayaran'"`
 	TanggalKedatangan time.Time      `json:"tanggal_kedatangan"`
 	TanggalKepulangan time.Time      `json:"tanggal_kepulangan" binding:"required"`
 	CreatedAt         time.Time      `json:"created_at"`
@@ -37,9 +39,9 @@ type Reservasi struct {
 	ID                 string           `json:"id" gorm:"type:varchar(36);primaryKey"`
 	InvoiceReservasiID string           `json:"invoice_reservasi_id" gorm:"type:varchar(36)"`
 	InvoiceReservasi   InvoiceReservasi `json:"invoice_reservasi" gorm:"foreignKey:InvoiceReservasiID"`
-	PerlengkapanID     string           `json:"perlengkapan_id" gorm:"type:varchar(36)"`
+	PerlengkapanID     *string          `json:"perlengkapan_id" gorm:"type:varchar(36);default:null"`
 	Perlengkapan       Perlengkapan     `json:"perlengkapan" gorm:"foreignKey:PerlengkapanID"`
-	KavlingID          string           `json:"kavling_id" gorm:"type:varchar(36)"`
+	KavlingID          *string          `json:"kavling_id" gorm:"type:varchar(36);default:null"`
 	Kavling            Kavling          `json:"kavling" gorm:"foreignKey:KavlingID"`
 	UserID             string           `json:"user_id" gorm:"type:varchar(36)"`
 	User               User             `json:"user" gorm:"foreignKey:UserID"`
@@ -50,6 +52,13 @@ type Reservasi struct {
 	DeletedAt          gorm.DeletedAt   `json:"deleted_at" gorm:"index"`
 }
 
+func (r *Reservasi) BeforeSave(tx *gorm.DB) error {
+	if r.KavlingID == nil && r.PerlengkapanID == nil {
+		return errors.New("either KavlingID or PerlengkapanID must be provided")
+	}
+	return nil
+}
+
 func (r *Reservasi) BeforeCreate() {
 	r.ID = uuid.New().String()
 	r.CreatedAt = time.Now()
@@ -58,16 +67,37 @@ func (r *Reservasi) BeforeCreate() {
 
 type InputInvoiceReservasi struct {
 	JenisPengunjung   string           `json:"jenis_pengunjung" binding:"required"`
-	Jumlah            int              `json:"jumlah" binding:"required"`
 	TanggalKedatangan string           `json:"tanggal_kedatangan" binding:"required"`
 	TanggalKepulangan string           `json:"tanggal_kepulangan" binding:"required"`
 	Reservasi         []InputReservasi `json:"reservasi" binding:"required"`
 }
 
 type InputReservasi struct {
-	PerlengkapanID string `json:"perlengkapan_id" binding:"required"`
-	KavlingID      string `json:"kavling_id" binding:"required"`
-	Jumlah         int    `json:"jumlah" binding:"required"`
+	PerlengkapanID *string `json:"perlengkapan_id,omitempty"`
+	KavlingID      *string `json:"kavling_id,omitempty"`
+	Jumlah         int     `json:"jumlah" binding:"required"`
+}
+
+func (input *InputInvoiceReservasi) CalculateLamaHari() (int, error) {
+	const layout = "2006-01-02" // Adjust the layout according to your date format
+
+	tanggalKedatangan, err := time.Parse(layout, input.TanggalKedatangan)
+	if err != nil {
+		return 0, fmt.Errorf("invalid TanggalKedatangan: %v", err)
+	}
+
+	tanggalKepulangan, err := time.Parse(layout, input.TanggalKepulangan)
+	if err != nil {
+		return 0, fmt.Errorf("invalid TanggalKepulangan: %v", err)
+	}
+
+	if tanggalKepulangan.Before(tanggalKedatangan) {
+		return 0, fmt.Errorf("TanggalKepulangan cannot be before TanggalKedatangan")
+	}
+
+	// Add 1 to include the departure date as a full day
+	lamaHari := int(tanggalKepulangan.Sub(tanggalKedatangan).Hours()/24) + 1
+	return lamaHari, nil
 }
 
 func (i *InputInvoiceReservasi) ToInvoiceReservasi() *InvoiceReservasi {
@@ -78,18 +108,18 @@ func (i *InputInvoiceReservasi) ToInvoiceReservasi() *InvoiceReservasi {
 
 	invoiceReservasi := &InvoiceReservasi{
 		JenisPengunjung:   i.JenisPengunjung,
-		Jumlah:            i.Jumlah,
 		TanggalKedatangan: tanggalKedatangan,
 		TanggalKepulangan: tanggalKepulangan,
 	}
 	return invoiceReservasi
 }
 
-func (i *InputReservasi) ToReservasi() *Reservasi {
+func (i *InputReservasi) ToReservasi(invReservasi *InvoiceReservasi) *Reservasi {
 	reservasi := &Reservasi{
-		PerlengkapanID: i.PerlengkapanID,
-		KavlingID:      i.KavlingID,
-		Jumlah:         i.Jumlah,
+		InvoiceReservasiID: invReservasi.ID,
+		PerlengkapanID:     i.PerlengkapanID,
+		KavlingID:          i.KavlingID,
+		Jumlah:             i.Jumlah,
 	}
 	return reservasi
 }

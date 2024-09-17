@@ -54,6 +54,8 @@ func main() {
 		&model.Perlengkapan{},
 		&model.Ground{},
 		&model.Kavling{},
+		&model.Reservasi{},
+		&model.InvoiceReservasi{},
 	)
 
 	if err != nil {
@@ -117,6 +119,11 @@ func main() {
 	kavlingController := controller.NewKavlingController(repoKavling)
 	kavlingRoutes := routes.NewKavlingRoutes(kavlingController)
 	kavlingRoutes.SetupRoutes(v1)
+
+	repoReservasi := repositories.NewInvoiceReservasiRepository(db)
+	reservasiController := controller.NewInvoiceReservasiController(repoReservasi)
+	reservasiRoutes := routes.NewInvoiceReservasiRoutes(reservasiController)
+	reservasiRoutes.SetupRoutes(v1)
 
 	// Serve static files from the "storage/public" directory
 	router.Static("/api/v1/storage/public", "./storage/public")
