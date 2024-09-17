@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"github.com/adityarizkyramadhan/template-go-mvc/model"
+	"github.com/adityarizkyramadhan/template-go-mvc/model/dto"
 	"github.com/adityarizkyramadhan/template-go-mvc/utils"
 	"gorm.io/gorm"
 )
@@ -14,14 +15,31 @@ func NewKavlingRepository(db *gorm.DB) *Kavling {
 	return &Kavling{db}
 }
 
-func (p *Kavling) FindAll(idKavling string) ([]model.Kavling, error) {
+func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) ([]model.Kavling, error) {
 	var Kavlings []model.Kavling
-	if err := p.db.Find(&Kavlings, "ground_id = ?", idKavling).Error; err != nil {
+	if err := p.db.Find(&Kavlings, "ground_id = ?", req.GroundID).Error; err != nil {
 		return nil, err
 	}
 	if len(Kavlings) == 0 {
 		return nil, utils.NewError(utils.ErrNotFound, "Kavling tidak ditemukan")
 	}
+
+	for i := range Kavlings {
+		var reservasiCount int64
+		// Tambahkan Tanggal Kedatangan dan Tanggal Kepulangan
+		if err := p.db.Model(&model.Reservasi{}).
+			Joins("JOIN invoice_reservasis ON invoice_reservasis.id = reservasis.invoice_reservasi_id").
+			Where("reservasis.kavling_id = ?", Kavlings[i].ID).
+			Where("invoice_reservasis.tanggal_kedatangan <= ?", req.TanggalKepulangan).
+			Where("invoice_reservasis.tanggal_kepulangan >= ?", req.TanggalKedatangan).
+			Count(&reservasiCount).Error; err != nil {
+			return nil, err
+		}
+		if reservasiCount > 0 {
+			Kavlings[i].Status = "terisi"
+		}
+	}
+
 	return Kavlings, nil
 }
 

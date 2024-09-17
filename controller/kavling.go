@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/adityarizkyramadhan/template-go-mvc/model"
+	"github.com/adityarizkyramadhan/template-go-mvc/model/dto"
 	"github.com/adityarizkyramadhan/template-go-mvc/repositories"
 	"github.com/adityarizkyramadhan/template-go-mvc/utils"
 	"github.com/gin-gonic/gin"
@@ -26,8 +27,13 @@ func NewKavlingController(repoKavling *repositories.Kavling) *Kavling {
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /kavling [get]
 func (pc *Kavling) FindAll(ctx *gin.Context) {
-	idKavling := ctx.Query("ground_id")
-	Kavlings, err := pc.repoKavling.FindAll(idKavling)
+	var query dto.FindAllKavlingRequest
+	if err := ctx.ShouldBindQuery(&query); err != nil {
+		_ = ctx.Error(err)
+		ctx.Next()
+		return
+	}
+	Kavlings, err := pc.repoKavling.FindAll(&query)
 	if err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
