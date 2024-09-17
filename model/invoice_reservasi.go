@@ -23,9 +23,10 @@ type InvoiceReservasi struct {
 	Status            string         `json:"status" gorm:"type:text;default:'menunggu_pembayaran'"`
 	TanggalKedatangan time.Time      `json:"tanggal_kedatangan"`
 	TanggalKepulangan time.Time      `json:"tanggal_kepulangan" binding:"required"`
+	Reservasi         []Reservasi    `json:"reservasi" gorm:"foreignKey:InvoiceReservasiID"`
 	CreatedAt         time.Time      `json:"created_at"`
 	UpdatedAt         time.Time      `json:"updated_at"`
-	DeletedAt         gorm.DeletedAt `json:"deleted_at" gorm:"index"`
+	DeletedAt         gorm.DeletedAt `json:"-" gorm:"index"`
 }
 
 func (i *InvoiceReservasi) BeforeCreate() {
@@ -38,18 +39,18 @@ func (i *InvoiceReservasi) BeforeCreate() {
 type Reservasi struct {
 	ID                 string           `json:"id" gorm:"type:varchar(36);primaryKey"`
 	InvoiceReservasiID string           `json:"invoice_reservasi_id" gorm:"type:varchar(36)"`
-	InvoiceReservasi   InvoiceReservasi `json:"invoice_reservasi" gorm:"foreignKey:InvoiceReservasiID"`
+	InvoiceReservasi   InvoiceReservasi `json:"-" gorm:"foreignKey:InvoiceReservasiID"`
 	PerlengkapanID     *string          `json:"perlengkapan_id" gorm:"type:varchar(36);default:null"`
-	Perlengkapan       Perlengkapan     `json:"perlengkapan" gorm:"foreignKey:PerlengkapanID"`
+	Perlengkapan       Perlengkapan     `json:"-" gorm:"foreignKey:PerlengkapanID"`
 	KavlingID          *string          `json:"kavling_id" gorm:"type:varchar(36);default:null"`
-	Kavling            Kavling          `json:"kavling" gorm:"foreignKey:KavlingID"`
+	Kavling            Kavling          `json:"-" gorm:"foreignKey:KavlingID"`
 	UserID             string           `json:"user_id" gorm:"type:varchar(36)"`
 	User               User             `json:"user" gorm:"foreignKey:UserID"`
 	Jumlah             int              `json:"jumlah"`
 	Harga              int              `json:"harga"`
 	CreatedAt          time.Time        `json:"created_at"`
 	UpdatedAt          time.Time        `json:"updated_at"`
-	DeletedAt          gorm.DeletedAt   `json:"deleted_at" gorm:"index"`
+	DeletedAt          gorm.DeletedAt   `json:"-" gorm:"index"`
 }
 
 func (r *Reservasi) BeforeSave(tx *gorm.DB) error {

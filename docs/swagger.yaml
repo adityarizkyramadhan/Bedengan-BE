@@ -13,7 +13,43 @@ definitions:
       updated_at:
         type: string
     type: object
-  model.GroundInput:
+  model.InvoiceReservasi:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      jenis_pengunjung:
+        type: string
+      jumlah:
+        type: integer
+      link_pembayaran:
+        type: string
+      link_perizinan:
+        type: string
+      nomor_invoice:
+        type: string
+      reservasi:
+        items:
+          $ref: '#/definitions/model.Reservasi'
+        type: array
+      status:
+        type: string
+      tanggal_kedatangan:
+        type: string
+      tanggal_kepulangan:
+        type: string
+      total:
+        type: integer
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/model.User'
+      user_id:
+        type: string
+    required:
+    - jenis_pengunjung
+    - tanggal_kepulangan
     type: object
   model.Kavling:
     properties:
@@ -26,10 +62,12 @@ definitions:
         type: integer
       id:
         type: string
-      jenis_tenda:
-        type: string
       nama:
         type: string
+      reservasi:
+        items:
+          $ref: '#/definitions/model.Reservasi'
+        type: array
       status:
         description: GORM default
         type: string
@@ -42,18 +80,12 @@ definitions:
         type: string
       harga:
         type: integer
-      jenis_tenda:
-        type: string
       nama:
-        type: string
-      status:
         type: string
     required:
     - ground_id
     - harga
-    - jenis_tenda
     - nama
-    - status
     type: object
   model.Perlengkapan:
     properties:
@@ -87,6 +119,29 @@ definitions:
     - harga
     - nama
     - stok
+    type: object
+  model.Reservasi:
+    properties:
+      created_at:
+        type: string
+      harga:
+        type: integer
+      id:
+        type: string
+      invoice_reservasi_id:
+        type: string
+      jumlah:
+        type: integer
+      kavling_id:
+        type: string
+      perlengkapan_id:
+        type: string
+      updated_at:
+        type: string
+      user:
+        $ref: '#/definitions/model.User'
+      user_id:
+        type: string
     type: object
   model.User:
     properties:
@@ -230,7 +285,7 @@ paths:
   /ground/{id}:
     delete:
       consumes:
-      - application/json
+      - multipart/form-data
       description: Menghapus data Ground berdasarkan id
       parameters:
       - description: ID Ground
@@ -243,12 +298,16 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: Data Ground
-        in: body
-        name: Ground
+      - description: Nama Ground
+        in: formData
+        name: name
         required: true
-        schema:
-          $ref: '#/definitions/model.GroundInput'
+        type: string
+      - description: Gambar Ground
+        in: formData
+        name: image
+        required: true
+        type: file
       produces:
       - application/json
       responses:
@@ -345,6 +404,30 @@ paths:
       summary: Memperbarui data Ground berdasarkan id
       tags:
       - Ground
+  /invoice-reservasi:
+    post:
+      consumes:
+      - application/json
+      description: Membuat data InvoiceReservasi baru
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.InvoiceReservasi'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Membuat data InvoiceReservasi baru
+      tags:
+      - InvoiceReservasi
   /kavling:
     get:
       consumes:

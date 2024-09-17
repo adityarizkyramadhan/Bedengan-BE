@@ -257,7 +257,7 @@ const docTemplate = `{
             "delete": {
                 "description": "Menghapus data Ground berdasarkan id",
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -282,13 +282,18 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Data Ground",
-                        "name": "Ground",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.GroundInput"
-                        }
+                        "type": "string",
+                        "description": "Nama Ground",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Gambar Ground",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -304,6 +309,47 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/model.Ground"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/invoice-reservasi": {
+            "post": {
+                "description": "Membuat data InvoiceReservasi baru",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "InvoiceReservasi"
+                ],
+                "summary": "Membuat data InvoiceReservasi baru",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.InvoiceReservasi"
                                         }
                                     }
                                 }
@@ -1223,8 +1269,62 @@ const docTemplate = `{
                 }
             }
         },
-        "model.GroundInput": {
-            "type": "object"
+        "model.InvoiceReservasi": {
+            "type": "object",
+            "required": [
+                "jenis_pengunjung",
+                "tanggal_kepulangan"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "jenis_pengunjung": {
+                    "type": "string"
+                },
+                "jumlah": {
+                    "type": "integer"
+                },
+                "link_pembayaran": {
+                    "type": "string"
+                },
+                "link_perizinan": {
+                    "type": "string"
+                },
+                "nomor_invoice": {
+                    "type": "string"
+                },
+                "reservasi": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Reservasi"
+                    }
+                },
+                "status": {
+                    "type": "string"
+                },
+                "tanggal_kedatangan": {
+                    "type": "string"
+                },
+                "tanggal_kepulangan": {
+                    "type": "string"
+                },
+                "total": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/model.User"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
         },
         "model.Kavling": {
             "type": "object",
@@ -1242,11 +1342,14 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
-                "jenis_tenda": {
-                    "type": "string"
-                },
                 "nama": {
                     "type": "string"
+                },
+                "reservasi": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Reservasi"
+                    }
                 },
                 "status": {
                     "description": "GORM default",
@@ -1262,9 +1365,7 @@ const docTemplate = `{
             "required": [
                 "ground_id",
                 "harga",
-                "jenis_tenda",
-                "nama",
-                "status"
+                "nama"
             ],
             "properties": {
                 "ground_id": {
@@ -1273,13 +1374,7 @@ const docTemplate = `{
                 "harga": {
                     "type": "integer"
                 },
-                "jenis_tenda": {
-                    "type": "string"
-                },
                 "nama": {
-                    "type": "string"
-                },
-                "status": {
                     "type": "string"
                 }
             }
@@ -1330,6 +1425,41 @@ const docTemplate = `{
                 },
                 "stok": {
                     "type": "integer"
+                }
+            }
+        },
+        "model.Reservasi": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "harga": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "invoice_reservasi_id": {
+                    "type": "string"
+                },
+                "jumlah": {
+                    "type": "integer"
+                },
+                "kavling_id": {
+                    "type": "string"
+                },
+                "perlengkapan_id": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/model.User"
+                },
+                "user_id": {
+                    "type": "string"
                 }
             }
         },

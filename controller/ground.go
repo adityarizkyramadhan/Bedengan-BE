@@ -123,11 +123,12 @@ func (kc *Ground) Update(ctx *gin.Context) {
 // @Summary      Menghapus data Ground berdasarkan id
 // @Description  Menghapus data Ground berdasarkan id
 // @Tags         Ground
-// @Accept       json
+// @Accept       multipart/form-data
 // @Produce      json
 // @Param        id     path    string     true  "ID Ground"
 // @Param 		 Authorization header string true "Bearer token"
-// @Param        Ground     body    model.GroundInput     true  "Data Ground"
+// @Param        name   formData string     true  "Nama Ground"
+// @Param        image  formData file       true  "Gambar Ground"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Ground}
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /ground/{id} [delete]
