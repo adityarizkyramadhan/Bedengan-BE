@@ -325,6 +325,48 @@ const docTemplate = `{
             }
         },
         "/invoice-reservasi": {
+            "get": {
+                "description": "Mengambil semua data InvoiceReservasi",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "InvoiceReservasi"
+                ],
+                "summary": "Mengambil semua data InvoiceReservasi",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.InvoiceReservasi"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Membuat data InvoiceReservasi baru",
                 "consumes": [
@@ -1318,9 +1360,6 @@ const docTemplate = `{
                 "updated_at": {
                     "type": "string"
                 },
-                "user": {
-                    "$ref": "#/definitions/model.User"
-                },
                 "user_id": {
                     "type": "string"
                 }
@@ -1454,9 +1493,6 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/model.User"
                 },
                 "user_id": {
                     "type": "string"

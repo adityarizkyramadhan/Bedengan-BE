@@ -16,5 +16,6 @@ func NewInvoiceReservasiRoutes(ctrlInvoiceReservasi *controller.InvoiceReservasi
 
 // SetupRoutes will setup the routes for InvoiceReservasi
 func (p *InvoiceReservasi) SetupRoutes(router *gin.RouterGroup) {
-	router.POST("/invoice-reservasi", middleware.JWTMiddleware([]string{"admin", "user"}), p.ctrlInvoiceReservasi.Create)
+	router.POST("/invoice-reservasi", middleware.JWTMiddleware([]string{"adm in", "user"}), p.ctrlInvoiceReservasi.Create)
+	router.GET("/invoice-reservasi", middleware.JWTMiddleware([]string{"admin", "user"}), p.ctrlInvoiceReservasi.FindAll)
 }

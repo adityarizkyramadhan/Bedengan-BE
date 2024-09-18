@@ -43,3 +43,24 @@ func (pc *InvoiceReservasi) Create(ctx *gin.Context) {
 
 	utils.SuccessResponse(ctx, 201, newInvoiceReservasi)
 }
+
+// FindAll akan mengambil semua data InvoiceReservasi
+// @Summary      Mengambil semua data InvoiceReservasi
+// @Description  Mengambil semua data InvoiceReservasi
+// @Tags         InvoiceReservasi
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  utils.SuccessResponseData{data=[]model.InvoiceReservasi}
+// @Failure      500  {object}  utils.ErrorResponseData
+// @Router       /invoice-reservasi [get]
+func (pc *InvoiceReservasi) FindAll(ctx *gin.Context) {
+	userID := ctx.MustGet("id").(string)
+	invoiceReservasi, err := pc.repo.FindAll(userID)
+	if err != nil {
+		_ = ctx.Error(err)
+		ctx.Next()
+		return
+	}
+
+	utils.SuccessResponse(ctx, 200, invoiceReservasi)
+}

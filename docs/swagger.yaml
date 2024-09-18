@@ -43,8 +43,6 @@ definitions:
         type: integer
       updated_at:
         type: string
-      user:
-        $ref: '#/definitions/model.User'
       user_id:
         type: string
     required:
@@ -138,8 +136,6 @@ definitions:
         type: string
       updated_at:
         type: string
-      user:
-        $ref: '#/definitions/model.User'
       user_id:
         type: string
     type: object
@@ -406,6 +402,31 @@ paths:
       tags:
       - Ground
   /invoice-reservasi:
+    get:
+      consumes:
+      - application/json
+      description: Mengambil semua data InvoiceReservasi
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.InvoiceReservasi'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Mengambil semua data InvoiceReservasi
+      tags:
+      - InvoiceReservasi
     post:
       consumes:
       - application/json
