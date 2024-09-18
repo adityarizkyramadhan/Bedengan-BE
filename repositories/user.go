@@ -118,7 +118,7 @@ func (u *User) Create(user *model.UserCreate) (*model.User, error) {
 // Update will update a user by id dengan check field yang tidak dirubah maka tidak diupdate
 func (u *User) Update(id string, user *model.UserUpdate) (*model.User, error) {
 	var oldUser model.User
-	if err := u.db.First(&oldUser, id).Error; err != nil {
+	if err := u.db.Where("id = ?", id).First(&oldUser).Error; err != nil {
 		return nil, utils.NewError(utils.ErrNotFound, "user tidak ditemukan")
 	}
 	if user.Name != "" {

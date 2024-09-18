@@ -175,12 +175,13 @@ definitions:
     type: object
   model.UserUpdate:
     properties:
-      city:
-        type: string
       name:
         type: string
-      province:
+      phone:
         type: string
+    required:
+    - name
+    - phone
     type: object
   utils.ErrorResponseData:
     properties:

@@ -63,7 +63,6 @@ type UserLogin struct {
 }
 
 type UserUpdate struct {
-	Name     string `json:"name"`
-	Province string `json:"province"`
-	City     string `json:"city"`
+	Name  string `form:"name" binding:"required"`
+	Phone string `form:"phone" binding:"required"`
 }

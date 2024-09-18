@@ -1508,14 +1508,15 @@ const docTemplate = `{
         },
         "model.UserUpdate": {
             "type": "object",
+            "required": [
+                "name",
+                "phone"
+            ],
             "properties": {
-                "city": {
-                    "type": "string"
-                },
                 "name": {
                     "type": "string"
                 },
-                "province": {
+                "phone": {
                     "type": "string"
                 }
             }

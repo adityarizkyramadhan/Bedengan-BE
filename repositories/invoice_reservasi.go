@@ -113,7 +113,7 @@ func (i *InvoiceReservasi) Create(userID string, inputInvoiceReservasi *model.In
 
 func (i *InvoiceReservasi) FindAll(userID string) ([]model.InvoiceReservasi, error) {
 	var invoices []model.InvoiceReservasi
-	if err := i.db.Where("user_id = ?", userID).Preload("").Preload("Reservasi").Find(&invoices).Error; err != nil {
+	if err := i.db.Where("user_id = ?", userID).Preload("Reservasi").Find(&invoices).Error; err != nil {
 		return nil, err
 	}
 	return invoices, nil
