@@ -450,6 +450,94 @@ paths:
       summary: Membuat data InvoiceReservasi baru
       tags:
       - InvoiceReservasi
+  /invoice-reservasi/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Menghapus data InvoiceReservasi berdasarkan id
+      parameters:
+      - description: ID InvoiceReservasi
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Menghapus data InvoiceReservasi berdasarkan id
+      tags:
+      - InvoiceReservasi
+    get:
+      consumes:
+      - application/json
+      description: Mengambil data InvoiceReservasi berdasarkan id
+      parameters:
+      - description: ID InvoiceReservasi
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.InvoiceReservasi'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Mengambil data InvoiceReservasi berdasarkan id
+      tags:
+      - InvoiceReservasi
+    put:
+      consumes:
+      - application/json
+      description: Mengupdate data InvoiceReservasi berdasarkan id
+      parameters:
+      - description: ID InvoiceReservasi
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.InvoiceReservasi'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Mengupdate data InvoiceReservasi berdasarkan id
+      tags:
+      - InvoiceReservasi
   /kavling:
     get:
       consumes:

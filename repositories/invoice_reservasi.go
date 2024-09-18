@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"time"
+
 	"github.com/adityarizkyramadhan/template-go-mvc/model"
 	"github.com/adityarizkyramadhan/template-go-mvc/utils"
 	"gorm.io/gorm"
@@ -121,20 +123,61 @@ func (i *InvoiceReservasi) FindAll(userID string) ([]model.InvoiceReservasi, err
 
 func (i *InvoiceReservasi) FindByID(userID, id string) (*model.InvoiceReservasi, error) {
 	var invoice model.InvoiceReservasi
-	if err := i.db.Where("user_id = ? AND id = ?", userID, id).First(&invoice).Error; err != nil {
+	if err := i.db.Where("user_id = ? AND id = ?", userID, id).Preload("Reservasi").First(&invoice).Error; err != nil {
 		return nil, err
 	}
 	return &invoice, nil
 }
 
 func (i *InvoiceReservasi) Update(userID, id string, inputInvoiceReservasi *model.InputInvoiceReservasi) (*model.InvoiceReservasi, error) {
-	invoice := inputInvoiceReservasi.ToInvoiceReservasi()
-	invoice.BeforeCreate()
-	invoice.UserID = userID
-	if err := i.db.Where("user_id = ? AND id = ?", userID, id).Updates(invoice).Error; err != nil {
+	// Update hanya bisa mengubah tanggal kedatangan dan tanggal kepulangan dan status serta link pembayaran
+	invoiceReservasi, err := i.FindByID(userID, id)
+	if err != nil {
 		return nil, err
 	}
-	return invoice, nil
+	timeParse := "2006-01-02"
+	invoiceReservasi.TanggalKedatangan, err = time.Parse(timeParse, inputInvoiceReservasi.TanggalKedatangan)
+	if err != nil {
+		return nil, err
+	}
+	invoiceReservasi.TanggalKepulangan, err = time.Parse(timeParse, inputInvoiceReservasi.TanggalKepulangan)
+	if err != nil {
+		return nil, err
+	}
+
+	tx := i.db.Begin()
+
+	// Cari dulu ditanggal kedatangan dan tanggal kepulangan apakah ada yang reservasi
+	var kavlingsID []string
+	for _, r := range inputInvoiceReservasi.Reservasi {
+		if r.KavlingID != nil {
+			kavlingsID = append(kavlingsID, *r.KavlingID)
+		}
+	}
+
+	var reservasiCount int64
+	// Pada tanggal_kedatangan sampai tanggal_kepulangan, kavling sudah ada yang reservasi
+	if err := tx.Preload("InvoiceReservasi").Model(&model.Reservasi{}).
+		Joins("JOIN invoice_reservasis ON invoice_reservasis.id = reservasis.invoice_reservasi_id").
+		Where("reservasis.kavling_id IN (?)", kavlingsID).
+		Where("invoice_reservasis.tanggal_kedatangan <= ?", inputInvoiceReservasi.TanggalKepulangan).
+		Where("invoice_reservasis.tanggal_kepulangan >= ?", inputInvoiceReservasi.TanggalKedatangan).
+		Count(&reservasiCount).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	if reservasiCount > 0 {
+		tx.Rollback()
+		return nil, utils.NewError(utils.ErrBadRequest, "Kavling sudah ada yang reservasi")
+	}
+
+	if err := tx.Save(invoiceReservasi).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	tx.Commit()
+	return invoiceReservasi, nil
 }
 
 func (i *InvoiceReservasi) Delete(userID, id string) error {

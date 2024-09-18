@@ -64,3 +64,81 @@ func (pc *InvoiceReservasi) FindAll(ctx *gin.Context) {
 
 	utils.SuccessResponse(ctx, 200, invoiceReservasi)
 }
+
+// FindByID akan mengambil data InvoiceReservasi berdasarkan id
+// @Summary      Mengambil data InvoiceReservasi berdasarkan id
+// @Description  Mengambil data InvoiceReservasi berdasarkan id
+// @Tags         InvoiceReservasi
+// @Accept       json
+// @Produce      json
+// @Param 		 id path string true "ID InvoiceReservasi"
+// @Success      200  {object}  utils.SuccessResponseData{data=model.InvoiceReservasi}
+// @Failure      500  {object}  utils.ErrorResponseData
+// @Router       /invoice-reservasi/{id} [get]
+func (pc *InvoiceReservasi) FindByID(ctx *gin.Context) {
+	userID := ctx.MustGet("id").(string)
+	id := ctx.Param("id")
+
+	invoiceReservasi, err := pc.repo.FindByID(userID, id)
+	if err != nil {
+		_ = ctx.Error(err)
+		ctx.Next()
+		return
+	}
+
+	utils.SuccessResponse(ctx, 200, invoiceReservasi)
+}
+
+// Delete akan menghapus data InvoiceReservasi berdasarkan id
+// @Summary      Menghapus data InvoiceReservasi berdasarkan id
+// @Description  Menghapus data InvoiceReservasi berdasarkan id
+// @Tags         InvoiceReservasi
+// @Accept       json
+// @Produce      json
+// @Param 		 id path string true "ID InvoiceReservasi"
+// @Success      200  {object}  utils.SuccessResponseData{data=string}
+// @Failure      500  {object}  utils.ErrorResponseData
+// @Router       /invoice-reservasi/{id} [delete]
+func (pc *InvoiceReservasi) Delete(ctx *gin.Context) {
+	userID := ctx.MustGet("id").(string)
+	id := ctx.Param("id")
+
+	if err := pc.repo.Delete(userID, id); err != nil {
+		_ = ctx.Error(err)
+		ctx.Next()
+		return
+	}
+
+	utils.SuccessResponse(ctx, 200, "Invoice reservasi berhasil dihapus")
+}
+
+// Update akan mengupdate data InvoiceReservasi berdasarkan id
+// @Summary      Mengupdate data InvoiceReservasi berdasarkan id
+// @Description  Mengupdate data InvoiceReservasi berdasarkan id
+// @Tags         InvoiceReservasi
+// @Accept       json
+// @Produce      json
+// @Param 		 id path string true "ID InvoiceReservasi"
+// @Success      200  {object}  utils.SuccessResponseData{data=model.InvoiceReservasi}
+// @Failure      500  {object}  utils.ErrorResponseData
+// @Router       /invoice-reservasi/{id} [put]
+func (pc *InvoiceReservasi) Update(ctx *gin.Context) {
+	userID := ctx.MustGet("id").(string)
+	id := ctx.Param("id")
+
+	var input model.InputInvoiceReservasi
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		_ = ctx.Error(err)
+		ctx.Next()
+		return
+	}
+
+	invoiceReservasi, err := pc.repo.Update(userID, id, &input)
+	if err != nil {
+		_ = ctx.Error(err)
+		ctx.Next()
+		return
+	}
+
+	utils.SuccessResponse(ctx, 200, invoiceReservasi)
+}
