@@ -875,7 +875,7 @@ const docTemplate = `{
             "post": {
                 "description": "Membuat data perlengkapan baru",
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -893,13 +893,39 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Perlengkapan data",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.PerlengkapanInput"
-                        }
+                        "type": "string",
+                        "description": "Nama Perlengkapan",
+                        "name": "nama",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deskripsi Perlengkapan",
+                        "name": "deskripsi",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Harga Perlengkapan",
+                        "name": "harga",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Stok Perlengkapan",
+                        "name": "stok",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Image Perlengkapan",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1013,13 +1039,39 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Perlengkapan data",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.PerlengkapanInput"
-                        }
+                        "type": "string",
+                        "description": "Nama Perlengkapan",
+                        "name": "nama",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deskripsi Perlengkapan",
+                        "name": "deskripsi",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Harga Perlengkapan",
+                        "name": "harga",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Stok Perlengkapan",
+                        "name": "stok",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Image Perlengkapan",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1633,6 +1685,9 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "image": {
+                    "type": "string"
+                },
                 "nama": {
                     "type": "string"
                 },
@@ -1641,29 +1696,6 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
-                }
-            }
-        },
-        "model.PerlengkapanInput": {
-            "type": "object",
-            "required": [
-                "deskripsi",
-                "harga",
-                "nama",
-                "stok"
-            ],
-            "properties": {
-                "deskripsi": {
-                    "type": "string"
-                },
-                "harga": {
-                    "type": "integer"
-                },
-                "nama": {
-                    "type": "string"
-                },
-                "stok": {
-                    "type": "integer"
                 }
             }
         },
@@ -1828,7 +1860,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "api.perkemahanbedengan.com",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "Islamind API",
+	Title:            "Perkemahan Bedengan API",
 	Description:      "This is API documentation for Islamind. You can use the API with the following hosts:\n- Production: api.perkemahanbedengan.com",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

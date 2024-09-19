@@ -131,28 +131,14 @@ definitions:
         type: integer
       id:
         type: string
+      image:
+        type: string
       nama:
         type: string
       stok:
         type: integer
       updated_at:
         type: string
-    type: object
-  model.PerlengkapanInput:
-    properties:
-      deskripsi:
-        type: string
-      harga:
-        type: integer
-      nama:
-        type: string
-      stok:
-        type: integer
-    required:
-    - deskripsi
-    - harga
-    - nama
-    - stok
     type: object
   model.Reservasi:
     properties:
@@ -268,7 +254,7 @@ info:
   description: |-
     This is API documentation for Islamind. You can use the API with the following hosts:
     - Production: api.perkemahanbedengan.com
-  title: Islamind API
+  title: Perkemahan Bedengan API
   version: "1.0"
 paths:
   /ground:
@@ -796,7 +782,7 @@ paths:
       - Perlengkapan
     post:
       consumes:
-      - application/json
+      - multipart/form-data
       description: Membuat data perlengkapan baru
       parameters:
       - description: Bearer token
@@ -804,12 +790,31 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: Perlengkapan data
-        in: body
-        name: request
+      - description: Nama Perlengkapan
+        in: formData
+        name: nama
         required: true
-        schema:
-          $ref: '#/definitions/model.PerlengkapanInput'
+        type: string
+      - description: Deskripsi Perlengkapan
+        in: formData
+        name: deskripsi
+        required: true
+        type: string
+      - description: Harga Perlengkapan
+        in: formData
+        name: harga
+        required: true
+        type: integer
+      - description: Stok Perlengkapan
+        in: formData
+        name: stok
+        required: true
+        type: integer
+      - description: Image Perlengkapan
+        in: formData
+        name: image
+        required: true
+        type: file
       produces:
       - application/json
       responses:
@@ -912,12 +917,31 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: Perlengkapan data
-        in: body
-        name: request
+      - description: Nama Perlengkapan
+        in: formData
+        name: nama
         required: true
-        schema:
-          $ref: '#/definitions/model.PerlengkapanInput'
+        type: string
+      - description: Deskripsi Perlengkapan
+        in: formData
+        name: deskripsi
+        required: true
+        type: string
+      - description: Harga Perlengkapan
+        in: formData
+        name: harga
+        required: true
+        type: integer
+      - description: Stok Perlengkapan
+        in: formData
+        name: stok
+        required: true
+        type: integer
+      - description: Image Perlengkapan
+        in: formData
+        name: image
+        required: true
+        type: file
       produces:
       - application/json
       responses:

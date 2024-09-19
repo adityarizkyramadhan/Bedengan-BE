@@ -24,7 +24,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title           Islamind API
+// @title           Perkemahan Bedengan API
 // @version         1.0
 // @description     This is API documentation for Islamind. You can use the API with the following hosts:
 // @description     - Production: api.perkemahanbedengan.com

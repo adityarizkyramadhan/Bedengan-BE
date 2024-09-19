@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "This is API documentation for Islamind. You can use the API with the following hosts:\n- Production: api.perkemahanbedengan.com",
-        "title": "Islamind API",
+        "title": "Perkemahan Bedengan API",
         "contact": {
             "name": "Aditya Rizky Ramadhan",
             "email": "adityarizky1020@gmail.com"
@@ -869,7 +869,7 @@
             "post": {
                 "description": "Membuat data perlengkapan baru",
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -887,13 +887,39 @@
                         "required": true
                     },
                     {
-                        "description": "Perlengkapan data",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.PerlengkapanInput"
-                        }
+                        "type": "string",
+                        "description": "Nama Perlengkapan",
+                        "name": "nama",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deskripsi Perlengkapan",
+                        "name": "deskripsi",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Harga Perlengkapan",
+                        "name": "harga",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Stok Perlengkapan",
+                        "name": "stok",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Image Perlengkapan",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1007,13 +1033,39 @@
                         "required": true
                     },
                     {
-                        "description": "Perlengkapan data",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.PerlengkapanInput"
-                        }
+                        "type": "string",
+                        "description": "Nama Perlengkapan",
+                        "name": "nama",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Deskripsi Perlengkapan",
+                        "name": "deskripsi",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Harga Perlengkapan",
+                        "name": "harga",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Stok Perlengkapan",
+                        "name": "stok",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Image Perlengkapan",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1627,6 +1679,9 @@
                 "id": {
                     "type": "string"
                 },
+                "image": {
+                    "type": "string"
+                },
                 "nama": {
                     "type": "string"
                 },
@@ -1635,29 +1690,6 @@
                 },
                 "updated_at": {
                     "type": "string"
-                }
-            }
-        },
-        "model.PerlengkapanInput": {
-            "type": "object",
-            "required": [
-                "deskripsi",
-                "harga",
-                "nama",
-                "stok"
-            ],
-            "properties": {
-                "deskripsi": {
-                    "type": "string"
-                },
-                "harga": {
-                    "type": "integer"
-                },
-                "nama": {
-                    "type": "string"
-                },
-                "stok": {
-                    "type": "integer"
                 }
             }
         },
