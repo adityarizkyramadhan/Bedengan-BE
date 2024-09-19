@@ -198,3 +198,26 @@ func (pc *InvoiceReservasi) VerifikasiInvoice(ctx *gin.Context) {
 
 	utils.SuccessResponse(ctx, 200, invoiceReservasi)
 }
+
+// TolakInvoice akan mengupdate status InvoiceReservasi menjadi "ditolak"
+// @Summary      Mengupdate status InvoiceReservasi menjadi "ditolak"
+// @Description  Mengupdate status InvoiceReservasi menjadi "ditolak"
+// @Tags         InvoiceReservasi
+// @Accept       json
+// @Produce      json
+// @Param 		 id path string true "ID InvoiceReservasi"
+// @Success      200  {object}  utils.SuccessResponseData{data=model.InvoiceReservasi}
+// @Failure      500  {object}  utils.ErrorResponseData
+// @Router       /invoice-reservasi/{id}/tolak [put]
+func (pc *InvoiceReservasi) TolakInvoice(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	invoiceReservasi, err := pc.repo.TolakInvoice(id)
+	if err != nil {
+		_ = ctx.Error(err)
+		ctx.Next()
+		return
+	}
+
+	utils.SuccessResponse(ctx, 200, invoiceReservasi)
+}
