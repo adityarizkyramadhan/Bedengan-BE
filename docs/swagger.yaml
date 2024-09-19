@@ -625,6 +625,36 @@ paths:
       summary: Mengupdate file InvoiceReservasi berdasarkan id
       tags:
       - InvoiceReservasi
+  /invoice-reservasi/{id}/tolak:
+    put:
+      consumes:
+      - application/json
+      description: Mengupdate status InvoiceReservasi menjadi "ditolak"
+      parameters:
+      - description: ID InvoiceReservasi
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.InvoiceReservasi'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Mengupdate status InvoiceReservasi menjadi "ditolak"
+      tags:
+      - InvoiceReservasi
   /invoice-reservasi/{id}/verifikasi:
     put:
       consumes:
