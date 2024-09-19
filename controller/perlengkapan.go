@@ -59,17 +59,21 @@ func (pc *Perlengkapan) FindByID(ctx *gin.Context) {
 // @Summary      Membuat data perlengkapan baru
 // @Description  Membuat data perlengkapan baru
 // @Tags         Perlengkapan
-// @Accept       json
+// @Accept       multipart/form-data
 // @Produce      json
 // @Param 		 Authorization header string true "Bearer token"
-// @Param 		 request  body  model.PerlengkapanInput true "Perlengkapan data"
+// @Param 		 nama formData string true "Nama Perlengkapan"
+// @Param 		 deskripsi formData string true "Deskripsi Perlengkapan"
+// @Param 		 harga formData int true "Harga Perlengkapan"
+// @Param 		 stok formData int true "Stok Perlengkapan"
+// @Param 		 image formData file true "Image Perlengkapan"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Perlengkapan}
 // @Failure      422  {object}  utils.ErrorResponseData
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /perlengkapan [post]
 func (pc *Perlengkapan) Create(ctx *gin.Context) {
 	perlengkapan := &model.PerlengkapanInput{}
-	if err := ctx.ShouldBindJSON(perlengkapan); err != nil {
+	if err := ctx.ShouldBind(perlengkapan); err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
 		return
@@ -92,7 +96,11 @@ func (pc *Perlengkapan) Create(ctx *gin.Context) {
 // @Produce      json
 // @Param        id     path    string     true  "ID Perlengkapan"
 // @Param 		 Authorization header string true "Bearer token"
-// @Param 		 request  body  model.PerlengkapanInput true "Perlengkapan data"
+// @Param 		 nama formData string true "Nama Perlengkapan"
+// @Param 		 deskripsi formData string true "Deskripsi Perlengkapan"
+// @Param 		 harga formData int true "Harga Perlengkapan"
+// @Param 		 stok formData int true "Stok Perlengkapan"
+// @Param 		 image formData file true "Image Perlengkapan"
 // @Success      201  {object}  utils.SuccessResponseData{data=model.Perlengkapan}
 // @Failure      422  {object}  utils.ErrorResponseData
 // @Failure      500  {object}  utils.ErrorResponseData
@@ -100,7 +108,7 @@ func (pc *Perlengkapan) Create(ctx *gin.Context) {
 func (pc *Perlengkapan) Update(ctx *gin.Context) {
 	id := ctx.Param("id")
 	perlengkapan := &model.PerlengkapanInput{}
-	if err := ctx.ShouldBindJSON(perlengkapan); err != nil {
+	if err := ctx.ShouldBind(perlengkapan); err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
 		return

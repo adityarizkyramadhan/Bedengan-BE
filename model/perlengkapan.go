@@ -1,6 +1,7 @@
 package model
 
 import (
+	"mime/multipart"
 	"time"
 
 	"github.com/google/uuid"
@@ -13,6 +14,7 @@ type Perlengkapan struct {
 	Deskripsi string         `json:"deskripsi" gorm:"type:text;not null"`
 	Harga     int            `json:"harga" gorm:"type:int;not null"`
 	Stok      int            `json:"stok" gorm:"type:int;not null"`
+	Image     string         `json:"image" gorm:"type:text"`
 	CreatedAt time.Time      `json:"created_at"`
 	UpdatedAt time.Time      `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
@@ -37,10 +39,11 @@ func (p *Perlengkapan) BeforeSave() error {
 }
 
 type PerlengkapanInput struct {
-	Nama      string `json:"nama" binding:"required"`
-	Deskripsi string `json:"deskripsi" binding:"required"`
-	Harga     int    `json:"harga" binding:"required"`
-	Stok      int    `json:"stok" binding:"required"`
+	Nama      string                `form:"nama" binding:"required"`
+	Deskripsi string                `form:"deskripsi" binding:"required"`
+	Harga     int                   `form:"harga" binding:"required"`
+	Stok      int                   `form:"stok" binding:"required"`
+	Image     *multipart.FileHeader `form:"image" binding:"required"`
 }
 
 func (p *PerlengkapanInput) ToPerlengkapan() *Perlengkapan {

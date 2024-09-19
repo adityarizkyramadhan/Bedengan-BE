@@ -36,6 +36,14 @@ func (p *Perlengkapan) FindByID(id string) (*model.Perlengkapan, error) {
 func (p *Perlengkapan) Create(perlengkapan *model.PerlengkapanInput) (*model.Perlengkapan, error) {
 	perlengkapanData := perlengkapan.ToPerlengkapan()
 	perlengkapanData.BeforeCreate()
+
+	link, err := utils.SaveFile(perlengkapan.Image, "public/perlengkapan")
+	if err != nil {
+		return nil, utils.NewError(utils.ErrBadRequest, err.Error())
+	}
+
+	perlengkapanData.Image = link
+
 	if err := p.db.Create(perlengkapanData).Error; err != nil {
 		return nil, utils.NewError(utils.ErrBadRequest, "gagal membuat perlengkapan")
 	}
@@ -46,6 +54,13 @@ func (p *Perlengkapan) Update(id string, perlengkapan *model.PerlengkapanInput) 
 	perlengkapanData := perlengkapan.ToPerlengkapan()
 	perlengkapanData.BeforeSave()
 	perlengkapanData.ID = id
+	if perlengkapan.Image != nil {
+		link, err := utils.SaveFile(perlengkapan.Image, "public/perlengkapan")
+		if err != nil {
+			return nil, utils.NewError(utils.ErrBadRequest, err.Error())
+		}
+		perlengkapanData.Image = link
+	}
 	if err := p.db.Model(&model.Perlengkapan{}).Where("id = ?", id).Updates(perlengkapanData).Error; err != nil {
 		return nil, utils.NewError(utils.ErrBadRequest, "gagal memperbarui perlengkapan")
 	}
