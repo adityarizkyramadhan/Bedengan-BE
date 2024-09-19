@@ -113,12 +113,16 @@ func (i *InvoiceReservasi) Create(userID string, inputInvoiceReservasi *model.In
 	return invoiceReservasi, nil
 }
 
-func (i *InvoiceReservasi) FindAll(userID string) ([]model.InvoiceReservasi, error) {
+func (i *InvoiceReservasi) FindAll(userID string) ([]model.InvoiceReservasiDTO, error) {
 	var invoices []model.InvoiceReservasi
-	if err := i.db.Where("user_id = ?", userID).Preload("Reservasi").Find(&invoices).Error; err != nil {
+	if err := i.db.Where("user_id = ?", userID).Preload("Reservasi.Kavling").Preload("Reservasi.Perlengkapan").Find(&invoices).Error; err != nil {
 		return nil, err
 	}
-	return invoices, nil
+	var invoicesDTO []model.InvoiceReservasiDTO
+	for _, i := range invoices {
+		invoicesDTO = append(invoicesDTO, i.ToDTO())
+	}
+	return invoicesDTO, nil
 }
 
 func (i *InvoiceReservasi) FindByID(userID, id string) (*model.InvoiceReservasi, error) {

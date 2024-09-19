@@ -50,7 +50,7 @@ func (pc *InvoiceReservasi) Create(ctx *gin.Context) {
 // @Tags         InvoiceReservasi
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  utils.SuccessResponseData{data=[]model.InvoiceReservasi}
+// @Success      200  {object}  utils.SuccessResponseData{data=[]model.InvoiceReservasiDTO}
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /invoice-reservasi [get]
 func (pc *InvoiceReservasi) FindAll(ctx *gin.Context) {
