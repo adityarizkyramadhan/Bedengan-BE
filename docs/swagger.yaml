@@ -585,6 +585,76 @@ paths:
       summary: Mengupdate data InvoiceReservasi berdasarkan id
       tags:
       - InvoiceReservasi
+  /invoice-reservasi/{id}/file:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Mengupdate file InvoiceReservasi berdasarkan id
+      parameters:
+      - description: ID InvoiceReservasi
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: File Pembayaran
+        in: formData
+        name: pembayaran
+        required: true
+        type: file
+      - description: File Perizinan
+        in: formData
+        name: perizinan
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.InvoiceReservasi'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Mengupdate file InvoiceReservasi berdasarkan id
+      tags:
+      - InvoiceReservasi
+  /invoice-reservasi/{id}/verifikasi:
+    put:
+      consumes:
+      - application/json
+      description: Mengupdate status InvoiceReservasi menjadi "verifikasi"
+      parameters:
+      - description: ID InvoiceReservasi
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/utils.SuccessResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.InvoiceReservasi'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Mengupdate status InvoiceReservasi menjadi "verifikasi"
+      tags:
+      - InvoiceReservasi
   /kavling:
     get:
       consumes:

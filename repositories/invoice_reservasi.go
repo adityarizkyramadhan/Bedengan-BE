@@ -200,3 +200,56 @@ func (i *InvoiceReservasi) Delete(userID, id string) error {
 	tx.Commit()
 	return nil
 }
+
+func (i *InvoiceReservasi) UpdateFile(userID, id string, fileInput *model.InvoiceReservasiFile) (*model.InvoiceReservasi, error) {
+	invoiceReservasi, err := i.FindByID(userID, id)
+	if err != nil {
+		return nil, err
+	}
+	if fileInput.Pembayaran != nil {
+		link, err := utils.SaveFile(fileInput.Pembayaran, "public/invoice")
+		if err != nil {
+			return nil, err
+		}
+		invoiceReservasi.LinkPembayaran = link
+	}
+
+	if fileInput.Perizinan != nil {
+		link, err := utils.SaveFile(fileInput.Perizinan, "public/invoice")
+		if err != nil {
+			return nil, err
+		}
+		invoiceReservasi.LinkPerizinan = link
+		invoiceReservasi.Status = "menunggu_verifikasi"
+	}
+
+	if err := i.db.Save(invoiceReservasi).Error; err != nil {
+		return nil, err
+	}
+
+	return invoiceReservasi, nil
+}
+
+func (i *InvoiceReservasi) VerifikasiInvoice(id string) (*model.InvoiceReservasi, error) {
+	invoiceReservasi, err := i.FindByID("", id)
+	if err != nil {
+		return nil, err
+	}
+	invoiceReservasi.Status = "verifikasi"
+	if err := i.db.Save(invoiceReservasi).Error; err != nil {
+		return nil, err
+	}
+	return invoiceReservasi, nil
+}
+
+func (i *InvoiceReservasi) TolakInvoice(id string) (*model.InvoiceReservasi, error) {
+	invoiceReservasi, err := i.FindByID("", id)
+	if err != nil {
+		return nil, err
+	}
+	invoiceReservasi.Status = "ditolak"
+	if err := i.db.Save(invoiceReservasi).Error; err != nil {
+		return nil, err
+	}
+	return invoiceReservasi, nil
+}

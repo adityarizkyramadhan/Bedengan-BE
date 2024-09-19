@@ -142,3 +142,59 @@ func (pc *InvoiceReservasi) Update(ctx *gin.Context) {
 
 	utils.SuccessResponse(ctx, 200, invoiceReservasi)
 }
+
+// UpdateFile akan mengupdate file InvoiceReservasi berdasarkan id
+// @Summary      Mengupdate file InvoiceReservasi berdasarkan id
+// @Description  Mengupdate file InvoiceReservasi berdasarkan id
+// @Tags         InvoiceReservasi
+// @Accept       multipart/form-data
+// @Produce      json
+// @Param 		 id path string true "ID InvoiceReservasi"
+// @Param 		 pembayaran formData file true "File Pembayaran"
+// @Param 		 perizinan formData file true "File Perizinan"
+// @Success      200  {object}  utils.SuccessResponseData{data=model.InvoiceReservasi}
+// @Failure      500  {object}  utils.ErrorResponseData
+// @Router       /invoice-reservasi/{id}/file [put]
+func (pc *InvoiceReservasi) UpdateFile(ctx *gin.Context) {
+	userID := ctx.MustGet("id").(string)
+	id := ctx.Param("id")
+
+	var input model.InvoiceReservasiFile
+	if err := ctx.ShouldBind(&input); err != nil {
+		_ = ctx.Error(err)
+		ctx.Next()
+		return
+	}
+
+	invoiceReservasi, err := pc.repo.UpdateFile(userID, id, &input)
+	if err != nil {
+		_ = ctx.Error(err)
+		ctx.Next()
+		return
+	}
+
+	utils.SuccessResponse(ctx, 200, invoiceReservasi)
+}
+
+// VerifikasiInvoice akan mengupdate status InvoiceReservasi menjadi "verifikasi"
+// @Summary      Mengupdate status InvoiceReservasi menjadi "verifikasi"
+// @Description  Mengupdate status InvoiceReservasi menjadi "verifikasi"
+// @Tags         InvoiceReservasi
+// @Accept       json
+// @Produce      json
+// @Param 		 id path string true "ID InvoiceReservasi"
+// @Success      200  {object}  utils.SuccessResponseData{data=model.InvoiceReservasi}
+// @Failure      500  {object}  utils.ErrorResponseData
+// @Router       /invoice-reservasi/{id}/verifikasi [put]
+func (pc *InvoiceReservasi) VerifikasiInvoice(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	invoiceReservasi, err := pc.repo.VerifikasiInvoice(id)
+	if err != nil {
+		_ = ctx.Error(err)
+		ctx.Next()
+		return
+	}
+
+	utils.SuccessResponse(ctx, 200, invoiceReservasi)
+}

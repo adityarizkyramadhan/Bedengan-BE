@@ -3,6 +3,7 @@ package model
 import (
 	"errors"
 	"fmt"
+	"mime/multipart"
 	"time"
 
 	"github.com/adityarizkyramadhan/template-go-mvc/utils"
@@ -195,4 +196,9 @@ func (i *InputReservasi) ToReservasi(invReservasi *InvoiceReservasi) *Reservasi 
 		Jumlah:             i.Jumlah,
 	}
 	return reservasi
+}
+
+type InvoiceReservasiFile struct {
+	Perizinan  *multipart.FileHeader `form:"perizinan" binding:"required"`
+	Pembayaran *multipart.FileHeader `form:"pembayaran" binding:"required"`
 }

@@ -553,6 +553,120 @@ const docTemplate = `{
                 }
             }
         },
+        "/invoice-reservasi/{id}/file": {
+            "put": {
+                "description": "Mengupdate file InvoiceReservasi berdasarkan id",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "InvoiceReservasi"
+                ],
+                "summary": "Mengupdate file InvoiceReservasi berdasarkan id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID InvoiceReservasi",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "File Pembayaran",
+                        "name": "pembayaran",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "File Perizinan",
+                        "name": "perizinan",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.InvoiceReservasi"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            }
+        },
+        "/invoice-reservasi/{id}/verifikasi": {
+            "put": {
+                "description": "Mengupdate status InvoiceReservasi menjadi \"verifikasi\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "InvoiceReservasi"
+                ],
+                "summary": "Mengupdate status InvoiceReservasi menjadi \"verifikasi\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID InvoiceReservasi",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/utils.SuccessResponseData"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/model.InvoiceReservasi"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            }
+        },
         "/kavling": {
             "get": {
                 "description": "Menampilkan semua data Kavling",
