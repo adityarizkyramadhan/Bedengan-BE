@@ -345,7 +345,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/model.InvoiceReservasi"
+                                                "$ref": "#/definitions/model.InvoiceReservasiDTO"
                                             }
                                         }
                                     }
@@ -1505,6 +1505,60 @@
                 }
             }
         },
+        "model.InvoiceReservasiDTO": {
+            "type": "object",
+            "required": [
+                "jenis_pengunjung",
+                "tanggal_kepulangan"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "jenis_pengunjung": {
+                    "type": "string"
+                },
+                "jumlah": {
+                    "type": "integer"
+                },
+                "link_pembayaran": {
+                    "type": "string"
+                },
+                "link_perizinan": {
+                    "type": "string"
+                },
+                "nomor_invoice": {
+                    "type": "string"
+                },
+                "reservasi": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.ReservasiDTO"
+                    }
+                },
+                "status": {
+                    "type": "string"
+                },
+                "tanggal_kedatangan": {
+                    "type": "string"
+                },
+                "tanggal_kepulangan": {
+                    "type": "string"
+                },
+                "total": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "model.Kavling": {
             "type": "object",
             "properties": {
@@ -1627,6 +1681,44 @@
                 },
                 "kavling_id": {
                     "type": "string"
+                },
+                "perlengkapan_id": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ReservasiDTO": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "harga": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "invoice_reservasi_id": {
+                    "type": "string"
+                },
+                "jumlah": {
+                    "type": "integer"
+                },
+                "kavling": {
+                    "$ref": "#/definitions/model.Kavling"
+                },
+                "kavling_id": {
+                    "type": "string"
+                },
+                "perlengkapan": {
+                    "$ref": "#/definitions/model.Perlengkapan"
                 },
                 "perlengkapan_id": {
                     "type": "string"

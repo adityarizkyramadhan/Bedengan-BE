@@ -49,6 +49,42 @@ definitions:
     - jenis_pengunjung
     - tanggal_kepulangan
     type: object
+  model.InvoiceReservasiDTO:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      jenis_pengunjung:
+        type: string
+      jumlah:
+        type: integer
+      link_pembayaran:
+        type: string
+      link_perizinan:
+        type: string
+      nomor_invoice:
+        type: string
+      reservasi:
+        items:
+          $ref: '#/definitions/model.ReservasiDTO'
+        type: array
+      status:
+        type: string
+      tanggal_kedatangan:
+        type: string
+      tanggal_kepulangan:
+        type: string
+      total:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    required:
+    - jenis_pengunjung
+    - tanggal_kepulangan
+    type: object
   model.Kavling:
     properties:
       created_at:
@@ -132,6 +168,31 @@ definitions:
         type: integer
       kavling_id:
         type: string
+      perlengkapan_id:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  model.ReservasiDTO:
+    properties:
+      created_at:
+        type: string
+      harga:
+        type: integer
+      id:
+        type: string
+      invoice_reservasi_id:
+        type: string
+      jumlah:
+        type: integer
+      kavling:
+        $ref: '#/definitions/model.Kavling'
+      kavling_id:
+        type: string
+      perlengkapan:
+        $ref: '#/definitions/model.Perlengkapan'
       perlengkapan_id:
         type: string
       updated_at:
@@ -417,7 +478,7 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/model.InvoiceReservasi'
+                    $ref: '#/definitions/model.InvoiceReservasiDTO'
                   type: array
               type: object
         "500":
