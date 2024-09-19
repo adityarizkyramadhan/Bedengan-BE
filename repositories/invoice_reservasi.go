@@ -166,6 +166,7 @@ func (i *InvoiceReservasi) Update(userID, id string, inputInvoiceReservasi *mode
 		Where("reservasis.kavling_id IN (?)", kavlingsID).
 		Where("invoice_reservasis.tanggal_kedatangan <= ?", inputInvoiceReservasi.TanggalKepulangan).
 		Where("invoice_reservasis.tanggal_kepulangan >= ?", inputInvoiceReservasi.TanggalKedatangan).
+		Where("invoice_reservasis.id != ?", id).
 		Count(&reservasiCount).Error; err != nil {
 		tx.Rollback()
 		return nil, err
