@@ -20,5 +20,5 @@ func (p *InvoiceReservasi) SetupRoutes(router *gin.RouterGroup) {
 	router.GET("/invoice-reservasi", middleware.JWTMiddleware([]string{"admin", "user"}), p.ctrlInvoiceReservasi.FindAll)
 	router.GET("/invoice-reservasi/:id", middleware.JWTMiddleware([]string{"admin", "user"}), p.ctrlInvoiceReservasi.FindByID)
 	router.PUT("/invoice-reservasi/:id", middleware.JWTMiddleware([]string{"admin", "user"}), p.ctrlInvoiceReservasi.Update)
-	router.DELETE("/invoice-reservasi/:id", middleware.JWTMiddleware([]string{"admin", "user"}), p.ctrlInvoiceReservasi.Delete)
+	router.DELETE("/invoice-reservasi/:id", middleware.JWTMiddleware([]string{"superadmin"}), p.ctrlInvoiceReservasi.Delete)
 }
