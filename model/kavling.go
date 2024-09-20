@@ -45,7 +45,7 @@ type KavlingInput struct {
 	Harga       int    `json:"harga" binding:"required"`
 	Baris       int    `json:"baris" binding:"required"`
 	Kolom       int    `json:"kolom" binding:"required"`
-	IsAvailable bool   `json:"is_available" binding:"required"`
+	IsAvailable bool   `json:"is_available"`
 }
 
 func (p *KavlingInput) ToKavling() *Kavling {
