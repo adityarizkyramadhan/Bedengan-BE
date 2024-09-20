@@ -1327,6 +1327,206 @@ const docTemplate = `{
                 }
             }
         },
+        "/sub-ground": {
+            "get": {
+                "description": "Find all sub ground",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubGround"
+                ],
+                "summary": "Find all sub ground",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Ground ID",
+                        "name": "ground_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.SubGround"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new sub ground",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubGround"
+                ],
+                "summary": "Create a new sub ground",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Sub Ground",
+                        "name": "sub_ground",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SubGroundInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.SubGround"
+                        }
+                    }
+                }
+            }
+        },
+        "/sub-ground/{id}": {
+            "get": {
+                "description": "Find a sub ground by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubGround"
+                ],
+                "summary": "Find a sub ground by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sub Ground ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.SubGround"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a sub ground by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubGround"
+                ],
+                "summary": "Update a sub ground by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sub Ground ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Sub Ground",
+                        "name": "sub_ground",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SubGroundInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.SubGround"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a sub ground by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SubGround"
+                ],
+                "summary": "Delete a sub ground by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sub Ground ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/user": {
             "get": {
                 "description": "Find user by id",
@@ -1668,6 +1868,12 @@ const docTemplate = `{
                 "nama": {
                     "type": "string"
                 },
+                "sub_grounds": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SubGround"
+                    }
+                },
                 "updated_at": {
                     "type": "string"
                 }
@@ -1784,30 +1990,28 @@ const docTemplate = `{
         "model.Kavling": {
             "type": "object",
             "properties": {
+                "baris": {
+                    "type": "integer"
+                },
                 "created_at": {
                     "type": "string"
                 },
-                "ground_id": {
-                    "type": "string"
-                },
                 "harga": {
-                    "description": "Sesuaikan tipe harga ke bigint",
                     "type": "integer"
                 },
                 "id": {
                     "type": "string"
                 },
+                "is_available": {
+                    "type": "boolean"
+                },
+                "kolom": {
+                    "type": "integer"
+                },
                 "nama": {
                     "type": "string"
                 },
-                "reservasi": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Reservasi"
-                    }
-                },
-                "status": {
-                    "description": "GORM default",
+                "sub_ground_id": {
                     "type": "string"
                 },
                 "updated_at": {
@@ -1818,18 +2022,26 @@ const docTemplate = `{
         "model.KavlingInput": {
             "type": "object",
             "required": [
-                "ground_id",
+                "baris",
                 "harga",
-                "nama"
+                "kolom",
+                "nama",
+                "sub_ground_id"
             ],
             "properties": {
-                "ground_id": {
-                    "type": "string"
+                "baris": {
+                    "type": "integer"
                 },
                 "harga": {
                     "type": "integer"
                 },
+                "kolom": {
+                    "type": "integer"
+                },
                 "nama": {
+                    "type": "string"
+                },
+                "sub_ground_id": {
                     "type": "string"
                 }
             }
@@ -1929,6 +2141,47 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SubGround": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "ground_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "kavlings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Kavling"
+                    }
+                },
+                "nama": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SubGroundInput": {
+            "type": "object",
+            "required": [
+                "ground_id",
+                "nama"
+            ],
+            "properties": {
+                "ground_id": {
+                    "type": "string"
+                },
+                "nama": {
                     "type": "string"
                 }
             }

@@ -9,12 +9,13 @@ import (
 )
 
 type Ground struct {
-	ID        string         `json:"id" gorm:"type:varchar(36);primary_key"`
-	Nama      string         `json:"nama" gorm:"type:varchar(255);not null"`
-	ImageLink string         `json:"image_link" gorm:"type:text"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
-	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
+	ID         string         `json:"id" gorm:"type:varchar(36);primary_key"`
+	Nama       string         `json:"nama" gorm:"type:varchar(255);not null"`
+	SubGrounds []SubGround    `json:"sub_grounds"`
+	ImageLink  string         `json:"image_link" gorm:"type:text"`
+	CreatedAt  time.Time      `json:"created_at"`
+	UpdatedAt  time.Time      `json:"updated_at"`
+	DeletedAt  gorm.DeletedAt `json:"-" gorm:"index"`
 }
 
 func (k *Ground) TableName() string {

@@ -15,32 +15,50 @@ func NewKavlingRepository(db *gorm.DB) *Kavling {
 	return &Kavling{db}
 }
 
-func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) ([]model.Kavling, error) {
-	var Kavlings []model.Kavling
-	if err := p.db.Find(&Kavlings, "ground_id = ?", req.GroundID).Error; err != nil {
+func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string][][]map[string]interface{}, error) {
+	var grounds []model.Ground
+
+	// Query GORM untuk mengambil data beserta relasi
+	err := p.db.Preload("SubGrounds.Kavlings", func(db *gorm.DB) *gorm.DB {
+		return db.Order("kolom ASC")
+	}).Find(&grounds).Error
+	if err != nil {
 		return nil, err
 	}
-	if len(Kavlings) == 0 {
-		return nil, utils.NewError(utils.ErrNotFound, "Kavling tidak ditemukan")
-	}
 
-	for i := range Kavlings {
-		var reservasiCount int64
-		// Tambahkan Tanggal Kedatangan dan Tanggal Kepulangan
-		if err := p.db.Model(&model.Reservasi{}).
-			Joins("JOIN invoice_reservasis ON invoice_reservasis.id = reservasis.invoice_reservasi_id").
-			Where("reservasis.kavling_id = ?", Kavlings[i].ID).
-			Where("invoice_reservasis.tanggal_kedatangan <= ?", req.TanggalKepulangan).
-			Where("invoice_reservasis.tanggal_kepulangan >= ?", req.TanggalKedatangan).
-			Count(&reservasiCount).Error; err != nil {
-			return nil, err
-		}
-		if reservasiCount > 0 {
-			Kavlings[i].Status = "terisi"
-		}
-	}
+	response := make(map[string]map[string][][]map[string]interface{})
 
-	return Kavlings, nil
+	for _, ground := range grounds {
+		subGroundMap := make(map[string][][]map[string]interface{})
+
+		for _, subGround := range ground.SubGrounds {
+			kavlingList := make([][]map[string]interface{}, 0)
+
+			// Group by baris
+			kavlingByBaris := map[int][]map[string]interface{}{}
+			for _, kavling := range subGround.Kavlings {
+				kavlingData := map[string]interface{}{
+					"kolom":        kavling.Kolom,
+					"baris":        kavling.Baris,
+					"id":           kavling.ID,
+					"ground":       ground.Nama,
+					"nomorGround":  subGround.Nama,
+					"nomorKavling": kavling.Nama,
+					"harga":        kavling.Harga,
+					"isAvailable":  kavling.IsAvailable,
+				}
+				kavlingByBaris[kavling.Baris] = append(kavlingByBaris[kavling.Baris], kavlingData)
+			}
+
+			// Konversi baris yang dikelompokkan ke dalam bentuk array
+			for _, kavlings := range kavlingByBaris {
+				kavlingList = append(kavlingList, kavlings)
+			}
+			subGroundMap[subGround.Nama] = kavlingList
+		}
+		response[ground.Nama] = subGroundMap
+	}
+	return response, nil
 }
 
 func (p *Kavling) FindByID(id string) (*model.Kavling, error) {

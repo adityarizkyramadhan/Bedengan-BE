@@ -53,6 +53,7 @@ func main() {
 		&model.User{},
 		&model.Perlengkapan{},
 		&model.Ground{},
+		&model.SubGround{},
 		&model.Kavling{},
 		&model.Reservasi{},
 		&model.InvoiceReservasi{},
@@ -114,6 +115,11 @@ func main() {
 	groundController := controller.NewGroundController(repoGround)
 	groundRoutes := routes.NewGroundRoutes(groundController)
 	groundRoutes.SetupRoutes(v1)
+
+	repoSubGround := repositories.NewSubGroundRepository(db)
+	subGroundController := controller.NewSubGroundController(repoSubGround)
+	subGroundRoutes := routes.NewSubGroundRoutes(subGroundController)
+	subGroundRoutes.SetupRoutes(v1)
 
 	repoKavling := repositories.NewKavlingRepository(db)
 	kavlingController := controller.NewKavlingController(repoKavling)

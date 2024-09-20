@@ -10,6 +10,10 @@ definitions:
         type: string
       nama:
         type: string
+      sub_grounds:
+        items:
+          $ref: '#/definitions/model.SubGround'
+        type: array
       updated_at:
         type: string
     type: object
@@ -87,39 +91,43 @@ definitions:
     type: object
   model.Kavling:
     properties:
+      baris:
+        type: integer
       created_at:
         type: string
-      ground_id:
-        type: string
       harga:
-        description: Sesuaikan tipe harga ke bigint
         type: integer
       id:
         type: string
+      is_available:
+        type: boolean
+      kolom:
+        type: integer
       nama:
         type: string
-      reservasi:
-        items:
-          $ref: '#/definitions/model.Reservasi'
-        type: array
-      status:
-        description: GORM default
+      sub_ground_id:
         type: string
       updated_at:
         type: string
     type: object
   model.KavlingInput:
     properties:
-      ground_id:
-        type: string
+      baris:
+        type: integer
       harga:
+        type: integer
+      kolom:
         type: integer
       nama:
         type: string
+      sub_ground_id:
+        type: string
     required:
-    - ground_id
+    - baris
     - harga
+    - kolom
     - nama
+    - sub_ground_id
     type: object
   model.Perlengkapan:
     properties:
@@ -185,6 +193,33 @@ definitions:
         type: string
       user_id:
         type: string
+    type: object
+  model.SubGround:
+    properties:
+      created_at:
+        type: string
+      ground_id:
+        type: string
+      id:
+        type: string
+      kavlings:
+        items:
+          $ref: '#/definitions/model.Kavling'
+        type: array
+      nama:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  model.SubGroundInput:
+    properties:
+      ground_id:
+        type: string
+      nama:
+        type: string
+    required:
+    - ground_id
+    - nama
     type: object
   model.User:
     properties:
@@ -1065,6 +1100,140 @@ paths:
       summary: Memperbarui data perlengkapan berdasarkan id
       tags:
       - Perlengkapan
+  /sub-ground:
+    get:
+      consumes:
+      - application/json
+      description: Find all sub ground
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Ground ID
+        in: query
+        name: ground_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.SubGround'
+            type: array
+      summary: Find all sub ground
+      tags:
+      - SubGround
+    post:
+      consumes:
+      - application/json
+      description: Create a new sub ground
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Sub Ground
+        in: body
+        name: sub_ground
+        required: true
+        schema:
+          $ref: '#/definitions/model.SubGroundInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SubGround'
+      summary: Create a new sub ground
+      tags:
+      - SubGround
+  /sub-ground/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a sub ground by id
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Sub Ground ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete a sub ground by id
+      tags:
+      - SubGround
+    get:
+      consumes:
+      - application/json
+      description: Find a sub ground by id
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Sub Ground ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SubGround'
+      summary: Find a sub ground by id
+      tags:
+      - SubGround
+    put:
+      consumes:
+      - application/json
+      description: Update a sub ground by id
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Sub Ground ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Sub Ground
+        in: body
+        name: sub_ground
+        required: true
+        schema:
+          $ref: '#/definitions/model.SubGroundInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SubGround'
+      summary: Update a sub ground by id
+      tags:
+      - SubGround
   /user:
     get:
       consumes:
