@@ -25,6 +25,7 @@ type InvoiceReservasi struct {
 	Tipe              string         `json:"tipe" gorm:"type:text;default:'online'"`
 	TanggalKedatangan time.Time      `json:"tanggal_kedatangan"`
 	TanggalKepulangan time.Time      `json:"tanggal_kepulangan" binding:"required"`
+	Keterangan        string         `json:"keterangan" gorm:"type:text"`
 	Reservasi         []Reservasi    `json:"reservasi" gorm:"foreignKey:InvoiceReservasiID"`
 	CreatedAt         time.Time      `json:"created_at"`
 	UpdatedAt         time.Time      `json:"updated_at"`
@@ -42,6 +43,7 @@ type InvoiceReservasiDTO struct {
 	Tipe              string         `json:"tipe" gorm:"type:text;default:'online'"`
 	LinkPerizinan     string         `json:"link_perizinan"`
 	Jumlah            int            `json:"jumlah" gorm:"default:0"`
+	Keterangan        string         `json:"keterangan" gorm:"type:text"`
 	Status            string         `json:"status" gorm:"type:text;default:'menunggu_pembayaran'"`
 	TanggalKedatangan time.Time      `json:"tanggal_kedatangan"`
 	TanggalKepulangan time.Time      `json:"tanggal_kepulangan" binding:"required"`
@@ -65,6 +67,7 @@ func (i *InvoiceReservasi) ToDTO() InvoiceReservasiDTO {
 		Total:             i.Total,
 		LinkPembayaran:    i.LinkPembayaran,
 		Tipe:              i.Tipe,
+		Keterangan:        i.Keterangan,
 		LinkPerizinan:     i.LinkPerizinan,
 		Jumlah:            i.Jumlah,
 		Status:            i.Status,
@@ -145,6 +148,7 @@ func (r *Reservasi) BeforeCreate() {
 type InputInvoiceReservasi struct {
 	JenisPengunjung   string           `json:"jenis_pengunjung" binding:"required"`
 	TanggalKedatangan string           `json:"tanggal_kedatangan" binding:"required"`
+	Keterangan        string           `json:"keterangan"`
 	TanggalKepulangan string           `json:"tanggal_kepulangan" binding:"required"`
 	Reservasi         []InputReservasi `json:"reservasi" binding:"required"`
 }
@@ -187,6 +191,7 @@ func (i *InputInvoiceReservasi) ToInvoiceReservasi() *InvoiceReservasi {
 		JenisPengunjung:   i.JenisPengunjung,
 		TanggalKedatangan: tanggalKedatangan,
 		TanggalKepulangan: tanggalKepulangan,
+		Keterangan:        i.Keterangan,
 	}
 	return invoiceReservasi
 }
@@ -202,6 +207,6 @@ func (i *InputReservasi) ToReservasi(invReservasi *InvoiceReservasi) *Reservasi 
 }
 
 type InvoiceReservasiFile struct {
-	Perizinan  *multipart.FileHeader `form:"perizinan" binding:"required"`
+	Perizinan  *multipart.FileHeader `form:"perizinan"`
 	Pembayaran *multipart.FileHeader `form:"pembayaran" binding:"required"`
 }
