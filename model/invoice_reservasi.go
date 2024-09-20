@@ -13,7 +13,7 @@ import (
 
 type InvoiceReservasi struct {
 	ID                string         `json:"id" gorm:"type:varchar(36);primaryKey"`
-	UserID            string         `json:"user_id" gorm:"type:varchar(36)"`
+	UserID            *string        `json:"user_id" gorm:"type:varchar(36)"`
 	User              User           `json:"-" gorm:"foreignKey:UserID"`
 	NomorInvoice      string         `json:"nomor_invoice" gorm:"type:varchar(50)"`
 	JenisPengunjung   string         `json:"jenis_pengunjung" binding:"required"`
@@ -32,7 +32,7 @@ type InvoiceReservasi struct {
 
 type InvoiceReservasiDTO struct {
 	ID                string         `json:"id" gorm:"type:varchar(36);primaryKey"`
-	UserID            string         `json:"user_id" gorm:"type:varchar(36)"`
+	UserID            *string        `json:"user_id" gorm:"type:varchar(36)"`
 	User              User           `json:"-" gorm:"foreignKey:UserID"`
 	NomorInvoice      string         `json:"nomor_invoice" gorm:"type:varchar(50)"`
 	JenisPengunjung   string         `json:"jenis_pengunjung" binding:"required"`

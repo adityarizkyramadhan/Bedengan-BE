@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
@@ -15,6 +16,8 @@ func CheckToken(redis *redis.Client) gin.HandlerFunc {
 			c.Next()
 			return
 		}
+
+		token = strings.Replace(token, "Bearer ", "", 1)
 
 		// Jika ada token pada redis, maka token invalid karena sudah logout
 		if _, err := redis.Get(c, token).Result(); err == nil {

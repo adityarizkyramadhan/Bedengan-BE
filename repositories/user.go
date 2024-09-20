@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"strings"
 	"time"
 
 	"github.com/adityarizkyramadhan/template-go-mvc/model"
@@ -153,6 +154,7 @@ func (u *User) Login(email, password string) (*model.User, error) {
 }
 
 func (u *User) Logout(token string, expired time.Duration) error {
+	token = strings.Replace(token, "Bearer ", "", 1)
 	err := u.redis.Set(u.db.Statement.Context, token, true, expired).Err()
 	if err != nil {
 		return utils.NewError(utils.ErrBadRequest, "gagal logout")

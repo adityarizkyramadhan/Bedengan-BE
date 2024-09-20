@@ -19,7 +19,7 @@ func NewInvoiceReservasiRepository(db *gorm.DB) *InvoiceReservasi {
 func (i *InvoiceReservasi) Create(userID string, inputInvoiceReservasi *model.InputInvoiceReservasi) (*model.InvoiceReservasi, error) {
 	invoiceReservasi := inputInvoiceReservasi.ToInvoiceReservasi()
 	invoiceReservasi.BeforeCreate()
-	invoiceReservasi.UserID = userID
+	invoiceReservasi.UserID = &userID
 	tx := i.db.Begin()
 	// Jika kavling sudah ada yang reservasi maka tidak bisa reservasi
 	var kavlingsID []string
@@ -253,3 +253,5 @@ func (i *InvoiceReservasi) TolakInvoice(id string) (*model.InvoiceReservasi, err
 	}
 	return invoiceReservasi, nil
 }
+
+// func (i *InvoiceReservasi)
