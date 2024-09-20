@@ -254,4 +254,40 @@ func (i *InvoiceReservasi) TolakInvoice(id string) (*model.InvoiceReservasi, err
 	return invoiceReservasi, nil
 }
 
-// func (i *InvoiceReservasi)
+func (i *InvoiceReservasi) AdminFindAll() (interface{}, error) {
+	var invoices []model.InvoiceReservasi
+	if err := i.db.Preload("Reservasi.Kavling").Preload("Reservasi.Perlengkapan").Find(&invoices).Error; err != nil {
+		return nil, err
+	}
+	var invoicesDTO []model.InvoiceReservasiDTO
+	for _, i := range invoices {
+		invoicesDTO = append(invoicesDTO, i.ToDTO())
+	}
+
+	response := make(map[string]interface{})
+
+	jumlahPembayaran := 0
+	jumlahOnline := 0
+	jumlahOffline := 0
+	jumlahVerifikasi := 0
+
+	for _, i := range invoicesDTO {
+		if i.Status == "verifikasi" {
+			jumlahPembayaran += i.Jumlah
+			jumlahVerifikasi++
+		}
+		if i.Tipe == "offline" {
+			jumlahOffline++
+		} else {
+			jumlahOnline++
+		}
+	}
+
+	response["jumlah_pembayaran"] = jumlahPembayaran
+	response["invoices"] = invoicesDTO
+	response["jumlah_online"] = jumlahOnline
+	response["jumlah_offline"] = jumlahOffline
+	response["jumlah_verifikasi"] = jumlahVerifikasi
+	response["perbandingan_sukses"] = (float64(jumlahVerifikasi) / float64(len(invoicesDTO))) * 100.0
+	return response, nil
+}

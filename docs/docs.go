@@ -407,6 +407,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/invoice-reservasi/admin": {
+            "get": {
+                "description": "Mengambil semua data InvoiceReservasi untuk admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "InvoiceReservasi"
+                ],
+                "summary": "Mengambil semua data InvoiceReservasi untuk admin",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.SuccessResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorResponseData"
+                        }
+                    }
+                }
+            }
+        },
         "/invoice-reservasi/{id}": {
             "get": {
                 "description": "Mengambil data InvoiceReservasi berdasarkan id",
@@ -1922,6 +1951,9 @@ const docTemplate = `{
                 "tanggal_kepulangan": {
                     "type": "string"
                 },
+                "tipe": {
+                    "type": "string"
+                },
                 "total": {
                     "type": "integer"
                 },
@@ -1974,6 +2006,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "tanggal_kepulangan": {
+                    "type": "string"
+                },
+                "tipe": {
                     "type": "string"
                 },
                 "total": {
@@ -2034,6 +2069,9 @@ const docTemplate = `{
                 },
                 "harga": {
                     "type": "integer"
+                },
+                "is_available": {
+                    "type": "boolean"
                 },
                 "kolom": {
                     "type": "integer"

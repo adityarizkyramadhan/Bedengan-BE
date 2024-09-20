@@ -43,6 +43,8 @@ definitions:
         type: string
       tanggal_kepulangan:
         type: string
+      tipe:
+        type: string
       total:
         type: integer
       updated_at:
@@ -78,6 +80,8 @@ definitions:
       tanggal_kedatangan:
         type: string
       tanggal_kepulangan:
+        type: string
+      tipe:
         type: string
       total:
         type: integer
@@ -116,6 +120,8 @@ definitions:
         type: integer
       harga:
         type: integer
+      is_available:
+        type: boolean
       kolom:
         type: integer
       nama:
@@ -718,6 +724,25 @@ paths:
           schema:
             $ref: '#/definitions/utils.ErrorResponseData'
       summary: Mengupdate status InvoiceReservasi menjadi "verifikasi"
+      tags:
+      - InvoiceReservasi
+  /invoice-reservasi/admin:
+    get:
+      consumes:
+      - application/json
+      description: Mengambil semua data InvoiceReservasi untuk admin
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.SuccessResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponseData'
+      summary: Mengambil semua data InvoiceReservasi untuk admin
       tags:
       - InvoiceReservasi
   /kavling:

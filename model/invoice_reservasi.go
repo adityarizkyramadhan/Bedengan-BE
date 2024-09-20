@@ -22,6 +22,7 @@ type InvoiceReservasi struct {
 	LinkPerizinan     string         `json:"link_perizinan"`
 	Jumlah            int            `json:"jumlah" gorm:"default:0"`
 	Status            string         `json:"status" gorm:"type:text;default:'menunggu_pembayaran'"`
+	Tipe              string         `json:"tipe" gorm:"type:text;default:'online'"`
 	TanggalKedatangan time.Time      `json:"tanggal_kedatangan"`
 	TanggalKepulangan time.Time      `json:"tanggal_kepulangan" binding:"required"`
 	Reservasi         []Reservasi    `json:"reservasi" gorm:"foreignKey:InvoiceReservasiID"`
@@ -38,6 +39,7 @@ type InvoiceReservasiDTO struct {
 	JenisPengunjung   string         `json:"jenis_pengunjung" binding:"required"`
 	Total             int            `json:"total"`
 	LinkPembayaran    string         `json:"link_pembayaran"`
+	Tipe              string         `json:"tipe" gorm:"type:text;default:'online'"`
 	LinkPerizinan     string         `json:"link_perizinan"`
 	Jumlah            int            `json:"jumlah" gorm:"default:0"`
 	Status            string         `json:"status" gorm:"type:text;default:'menunggu_pembayaran'"`
@@ -62,6 +64,7 @@ func (i *InvoiceReservasi) ToDTO() InvoiceReservasiDTO {
 		JenisPengunjung:   i.JenisPengunjung,
 		Total:             i.Total,
 		LinkPembayaran:    i.LinkPembayaran,
+		Tipe:              i.Tipe,
 		LinkPerizinan:     i.LinkPerizinan,
 		Jumlah:            i.Jumlah,
 		Status:            i.Status,

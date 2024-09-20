@@ -221,3 +221,23 @@ func (pc *InvoiceReservasi) TolakInvoice(ctx *gin.Context) {
 
 	utils.SuccessResponse(ctx, 200, invoiceReservasi)
 }
+
+// AdminFindAll akan mengambil semua data InvoiceReservasi untuk admin
+// @Summary      Mengambil semua data InvoiceReservasi untuk admin
+// @Description  Mengambil semua data InvoiceReservasi untuk admin
+// @Tags         InvoiceReservasi
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  utils.SuccessResponseData{}
+// @Failure      500  {object}  utils.ErrorResponseData
+// @Router       /invoice-reservasi/admin [get]
+func (pc *InvoiceReservasi) AdminFindAll(ctx *gin.Context) {
+	invoiceReservasi, err := pc.repo.AdminFindAll()
+	if err != nil {
+		_ = ctx.Error(err)
+		ctx.Next()
+		return
+	}
+
+	utils.SuccessResponse(ctx, 200, invoiceReservasi)
+}
