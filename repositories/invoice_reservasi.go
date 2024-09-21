@@ -30,6 +30,17 @@ func (i *InvoiceReservasi) Create(userID string, inputInvoiceReservasi *model.In
 		}
 	}
 
+	// ambil user ambil rolenya
+	var user model.User
+	if err := tx.First(&user, "id = ?", userID).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	if user.Role == "admin" {
+		invoiceReservasi.Tipe = "offline"
+	}
+
 	var reservasiCount int64
 	// Pada tanggal_kedatangan sampai tanggal_kepulangan, kavling sudah ada yang reservasi
 	if err := tx.Preload("InvoiceReservasi").Model(&model.Reservasi{}).
@@ -86,6 +97,16 @@ func (i *InvoiceReservasi) Create(userID string, inputInvoiceReservasi *model.In
 		}
 	}
 
+	// Set is_available menjadi false
+	for _, r := range inputInvoiceReservasi.Reservasi {
+		if r.KavlingID != nil {
+			if err := tx.Model(&model.Kavling{}).Where("id = ?", *r.KavlingID).Update("is_available", false).Error; err != nil {
+				tx.Rollback()
+				return nil, err
+			}
+		}
+	}
+
 	// Lama hari = tanggal kepulangan - tanggal kedatangan
 	lamaHari, err := inputInvoiceReservasi.CalculateLamaHari()
 	if err != nil {
@@ -116,7 +137,7 @@ func (i *InvoiceReservasi) Create(userID string, inputInvoiceReservasi *model.In
 
 func (i *InvoiceReservasi) FindAll(userID string) ([]model.InvoiceReservasiDTO, error) {
 	var invoices []model.InvoiceReservasi
-	if err := i.db.Where("user_id = ?", userID).Preload("Reservasi.Kavling").Preload("Reservasi.Perlengkapan").Find(&invoices).Error; err != nil {
+	if err := i.db.Order("created_at DESC").Where("user_id = ?", userID).Preload("Reservasi.Kavling").Preload("Reservasi.Perlengkapan").Find(&invoices).Error; err != nil {
 		return nil, err
 	}
 	var invoicesDTO []model.InvoiceReservasiDTO
