@@ -38,14 +38,16 @@ func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string
 			kavlingByBaris := map[int][]map[string]interface{}{}
 			for _, kavling := range subGround.Kavlings {
 				kavlingData := map[string]interface{}{
-					"kolom":        kavling.Kolom,
-					"baris":        kavling.Baris,
-					"id":           kavling.ID,
-					"ground":       ground.Nama,
-					"nomorGround":  subGround.Nama,
-					"nomorKavling": kavling.Nama,
-					"harga":        kavling.Harga,
-					"isAvailable":  kavling.IsAvailable,
+					"kolom":         kavling.Kolom,
+					"baris":         kavling.Baris,
+					"id":            kavling.ID,
+					"ground":        ground.Nama,
+					"nomorGround":   subGround.Nama,
+					"nomorKavling":  kavling.Nama,
+					"harga":         kavling.Harga,
+					"isAvailable":   kavling.IsAvailable,
+					"sub_ground_id": kavling.SubGroundID,
+					"groud_id":      ground.ID,
 				}
 				kavlingByBaris[kavling.Baris] = append(kavlingByBaris[kavling.Baris], kavlingData)
 			}
