@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"strings"
+
 	"github.com/adityarizkyramadhan/template-go-mvc/model"
 	"github.com/adityarizkyramadhan/template-go-mvc/utils"
 	"gorm.io/gorm"
@@ -14,9 +16,18 @@ func NewPerlengkapanRepository(db *gorm.DB) *Perlengkapan {
 	return &Perlengkapan{db}
 }
 
-func (p *Perlengkapan) FindAll() ([]model.Perlengkapan, error) {
+func (p *Perlengkapan) FindAll(query map[string]string) ([]model.Perlengkapan, error) {
 	var perlengkapans []model.Perlengkapan
-	if err := p.db.Find(&perlengkapans).Error; err != nil {
+	db := p.db
+
+	if query["jenis"] != "" {
+		// isi dari query antara tenda_paket,tenda_non_paket
+		// Jadi harus displit by comma
+		jenis := strings.Split(query["jenis"], ",")
+		db = db.Where("jenis IN (?)", jenis)
+	}
+
+	if err := db.Find(&perlengkapans).Error; err != nil {
 		return nil, utils.NewError(utils.ErrNotFound, "perlengkapan tidak ditemukan")
 	}
 	if len(perlengkapans) == 0 {

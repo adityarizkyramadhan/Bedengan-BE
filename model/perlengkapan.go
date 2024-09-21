@@ -12,6 +12,7 @@ type Perlengkapan struct {
 	ID        string         `json:"id" gorm:"type:varchar(36);primaryKey;default:(UUID())"`
 	Nama      string         `json:"nama" gorm:"type:varchar(255);not null"`
 	Deskripsi string         `json:"deskripsi" gorm:"type:text;not null"`
+	Jenis     string         `json:"jenis" gorm:"type:varchar(255)"`
 	Harga     int            `json:"harga" gorm:"type:int;not null"`
 	Stok      int            `json:"stok" gorm:"type:int;not null"`
 	Image     string         `json:"image" gorm:"type:text"`
@@ -41,6 +42,7 @@ func (p *Perlengkapan) BeforeSave() error {
 type PerlengkapanInput struct {
 	Nama      string                `form:"nama" binding:"required"`
 	Deskripsi string                `form:"deskripsi" binding:"required"`
+	Jenis     string                `form:"jenis" binding:"required"`
 	Harga     int                   `form:"harga" binding:"required"`
 	Stok      int                   `form:"stok" binding:"required"`
 	Image     *multipart.FileHeader `form:"image" binding:"required"`
@@ -50,6 +52,7 @@ func (p *PerlengkapanInput) ToPerlengkapan() *Perlengkapan {
 	return &Perlengkapan{
 		Nama:      p.Nama,
 		Deskripsi: p.Deskripsi,
+		Jenis:     p.Jenis,
 		Harga:     p.Harga,
 		Stok:      p.Stok,
 	}

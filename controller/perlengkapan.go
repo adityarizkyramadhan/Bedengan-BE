@@ -25,7 +25,10 @@ func NewPerlengkapanController(repoPerlengkapan *repositories.Perlengkapan) *Per
 // @Failure      500  {object}  utils.ErrorResponseData
 // @Router       /perlengkapan [get]
 func (pc *Perlengkapan) FindAll(ctx *gin.Context) {
-	perlengkapans, err := pc.repoPerlengkapan.FindAll()
+	var query = make(map[string]string)
+
+	query["jenis"] = ctx.Query("jenis")
+	perlengkapans, err := pc.repoPerlengkapan.FindAll(query)
 	if err != nil {
 		_ = ctx.Error(err)
 		ctx.Next()
