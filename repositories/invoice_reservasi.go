@@ -239,15 +239,15 @@ func (i *InvoiceReservasi) UpdateFile(userID, id string, fileInput *model.Invoic
 			return nil, err
 		}
 		invoiceReservasi.LinkPembayaran = link
+		invoiceReservasi.Status = "menunggu_verifikasi"
 	}
 
 	if fileInput.Perizinan != nil {
-		link, err := utils.SaveFile(fileInput.Perizinan, "public/invoice")
+		link, err := utils.SaveFile(fileInput.Perizinan, "public/perizinan")
 		if err != nil {
 			return nil, err
 		}
 		invoiceReservasi.LinkPerizinan = link
-		invoiceReservasi.Status = "menunggu_verifikasi"
 	}
 
 	if err := i.db.Save(invoiceReservasi).Error; err != nil {
