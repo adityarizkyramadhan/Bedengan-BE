@@ -149,7 +149,11 @@ func (i *InvoiceReservasi) FindAll(userID string) ([]model.InvoiceReservasiDTO, 
 
 func (i *InvoiceReservasi) FindByID(userID, id string) (*model.InvoiceReservasi, error) {
 	var invoice model.InvoiceReservasi
-	if err := i.db.Where("user_id = ? AND id = ?", userID, id).Preload("Reservasi").First(&invoice).Error; err != nil {
+	db := i.db.Preload("Reservasi.Kavling").Preload("Reservasi.Perlengkapan")
+	if userID != "" {
+		db = db.Where("user_id = ?", userID)
+	}
+	if err := db.First(&invoice, "id = ?", id).Error; err != nil {
 		return nil, err
 	}
 	return &invoice, nil
