@@ -177,8 +177,7 @@ func (input *InputInvoiceReservasi) CalculateLamaHari() (int, error) {
 		return 0, fmt.Errorf("TanggalKepulangan cannot be before TanggalKedatangan")
 	}
 
-	// Add 1 to include the departure date as a full day
-	lamaHari := int(tanggalKepulangan.Sub(tanggalKedatangan).Hours()/24) + 1
+	lamaHari := int(tanggalKepulangan.Sub(tanggalKedatangan).Hours() / 24)
 	return lamaHari, nil
 }
 
