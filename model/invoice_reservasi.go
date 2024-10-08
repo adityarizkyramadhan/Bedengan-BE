@@ -150,6 +150,7 @@ type InputInvoiceReservasi struct {
 	TanggalKedatangan string           `json:"tanggal_kedatangan" binding:"required"`
 	Keterangan        string           `json:"keterangan"`
 	TanggalKepulangan string           `json:"tanggal_kepulangan" binding:"required"`
+	Tipe              string           `json:"-"`
 	Reservasi         []InputReservasi `json:"reservasi" binding:"required"`
 }
 

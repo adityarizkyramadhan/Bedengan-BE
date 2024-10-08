@@ -34,6 +34,13 @@ func (pc *InvoiceReservasi) Create(ctx *gin.Context) {
 
 	userID := ctx.MustGet("id").(string)
 
+	userRole := ctx.MustGet("role").(string)
+	if userRole == "admin" {
+		input.Tipe = "offline"
+	} else {
+		input.Tipe = "online"
+	}
+
 	newInvoiceReservasi, err := pc.repo.Create(userID, &input)
 	if err != nil {
 		_ = ctx.Error(err)

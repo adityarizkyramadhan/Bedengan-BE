@@ -21,6 +21,7 @@ func (i *InvoiceReservasi) Create(userID string, inputInvoiceReservasi *model.In
 	invoiceReservasi.BeforeCreate()
 	invoiceReservasi.Status = "menunggu_pembayaran"
 	invoiceReservasi.UserID = &userID
+	invoiceReservasi.Tipe = inputInvoiceReservasi.Tipe
 	tx := i.db.Begin()
 	// Jika kavling sudah ada yang reservasi maka tidak bisa reservasi
 	var kavlingsID []string
