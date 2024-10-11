@@ -248,3 +248,14 @@ func (pc *InvoiceReservasi) AdminFindAll(ctx *gin.Context) {
 
 	utils.SuccessResponse(ctx, 200, invoiceReservasi)
 }
+
+func (pc *InvoiceReservasi) DailyCheckKavling(ctx *gin.Context) {
+	if err := pc.repo.DailyCheck(); err != nil {
+		_ = ctx.Error(err)
+		ctx.Next()
+		utils.ErrorResponse(ctx, 500, err.Error())
+		return
+	}
+
+	utils.SuccessResponse(ctx, 200, "Daily check kavling selesai")
+}

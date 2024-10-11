@@ -16,9 +16,11 @@ import (
 	"github.com/adityarizkyramadhan/template-go-mvc/model"
 	"github.com/adityarizkyramadhan/template-go-mvc/repositories"
 	"github.com/adityarizkyramadhan/template-go-mvc/routes"
+	"github.com/adityarizkyramadhan/template-go-mvc/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/natefinch/lumberjack"
+	"github.com/robfig/cron"
 	"github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -140,6 +142,22 @@ func main() {
 		Handler: router,
 	}
 
+	location, err := time.LoadLocation("Asia/Jakarta")
+	if err != nil {
+		panic(err)
+	}
+	time.Local = location
+
+	c := cron.New()
+
+	c.AddFunc("0 12 * * *", func() {
+		if err := utils.DailyCheckKavlingRawSQL(db); err != nil {
+			panic(err)
+		}
+	})
+
+	c.Start()
+
 	// Start server in a goroutine
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -151,8 +169,12 @@ func main() {
 	// Wait for interrupt signal to gracefully shutdown the server
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
-	log.Println("Shutting down server...")
+
+	// Use select to block the main goroutine and keep cron running
+	select {
+	case <-quit:
+		log.Println("Shutting down server...")
+	}
 
 	// The context is used to inform the server it has 5 seconds to finish
 	// the request it is currently handling
@@ -164,4 +186,5 @@ func main() {
 	}
 
 	log.Println("Server exiting")
+
 }
