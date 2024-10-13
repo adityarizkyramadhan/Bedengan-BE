@@ -144,7 +144,7 @@ func main() {
 
 	location, err := time.LoadLocation("Asia/Jakarta")
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 	time.Local = location
 
@@ -152,7 +152,7 @@ func main() {
 
 	c.AddFunc("0 12 * * *", func() {
 		if err := utils.DailyCheckKavlingRawSQL(db); err != nil {
-			panic(err)
+			log.Println(err)
 		}
 	})
 

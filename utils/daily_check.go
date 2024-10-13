@@ -38,9 +38,6 @@ func DailyCheckKavlingRawSQL(db *gorm.DB) error {
 			if err := db.Exec(`UPDATE kavlings SET is_available = true WHERE id = ?`, kavlingID.String).Error; err != nil {
 				return fmt.Errorf("error updating kavling availability for kavling ID %s: %w", kavlingID.String, err)
 			}
-			fmt.Printf("Kavling with ID %s is now available.\n", kavlingID.String)
-		} else {
-			fmt.Printf("No kavling found for user ID %s.\n", userID)
 		}
 	}
 
