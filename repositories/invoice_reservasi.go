@@ -318,3 +318,10 @@ func (i *InvoiceReservasi) AdminFindAll() (interface{}, error) {
 	response["perbandingan_sukses"] = (float64(jumlahVerifikasi) / float64(len(invoicesDTO))) * 100.0
 	return response, nil
 }
+
+func (i *InvoiceReservasi) DailyCheck() error {
+	if err := utils.DailyCheckKavlingRawSQL(i.db); err != nil {
+		return err
+	}
+	return nil
+}

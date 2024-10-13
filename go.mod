@@ -6,6 +6,7 @@ require gorm.io/driver/postgres v1.5.9
 
 require (
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
+	github.com/robfig/cron v1.2.0 // indirect
 	gorm.io/driver/mysql v1.5.7 // indirect
 )
 
