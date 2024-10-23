@@ -72,6 +72,8 @@ func (u *User) Create(user *model.UserCreate) (*model.User, error) {
 		Password: string(hashPassword),
 		Role:     "user",
 		Phone:    user.Phone,
+		Alamat:   user.Alamat,
+		NIK:      user.NIK,
 	}
 
 	tx := u.db.Begin()
@@ -95,14 +97,6 @@ func (u *User) Create(user *model.UserCreate) (*model.User, error) {
 		}
 		newUser = searchUser
 	}
-
-	link, err := utils.SaveFile(user.FileKTP, "public/ktp")
-	if err != nil {
-		tx.Rollback()
-		return nil, utils.NewError(utils.ErrBadRequest, "gagal menyimpan file")
-	}
-
-	newUser.LinkKTP = link
 	if err := tx.Save(&newUser).Error; err != nil {
 		tx.Rollback()
 		return nil, utils.NewError(utils.ErrBadRequest, "gagal memperbarui user dengan link KTP")
@@ -122,10 +116,11 @@ func (u *User) Update(id string, user *model.UserUpdate) (*model.User, error) {
 	if err := u.db.Where("id = ?", id).First(&oldUser).Error; err != nil {
 		return nil, utils.NewError(utils.ErrNotFound, "user tidak ditemukan")
 	}
-	if user.Name != "" {
-		oldUser.Name = user.Name
-	}
-	if err := u.db.Save(&oldUser).Error; err != nil {
+	oldUser.Name = user.Name
+	oldUser.Phone = user.Phone
+	oldUser.NIK = user.NIK
+	oldUser.Alamat = user.Alamat
+	if err := u.db.Where("id = ?", id).Save(&oldUser).Error; err != nil {
 		return nil, utils.NewError(utils.ErrBadRequest, "gagal update user")
 	}
 	return &oldUser, nil

@@ -1,7 +1,6 @@
 package model
 
 import (
-	"mime/multipart"
 	"time"
 
 	"github.com/google/uuid"
@@ -20,8 +19,8 @@ type User struct {
 	Role string `json:"role" gorm:"type:varchar(255);not null"`
 	// Password disimpan dalam bentuk hash
 	Password string `json:"-" gorm:"type:text;not null"`
-	// Link KTP merupakan link ke file KTP
-	LinkKTP string `json:"link_ktp" gorm:"type:text"`
+	NIK      string `json:"nik" gorm:"type:text"`
+	Alamat   string `json:"alamat" gorm:"type:text"`
 	// Phone merupakan nomor telepon yang tidak boleh kosong
 	Phone string `json:"phone" gorm:"type:varchar(255);not null"`
 	// CreatedAt menandakan waktu user dibuat
@@ -49,12 +48,14 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 type UserCreate struct {
-	Email           string                `form:"email" binding:"required,email"`
-	Name            string                `form:"name" binding:"required"`
-	Password        string                `form:"password" binding:"required"`
-	Phone           string                `form:"phone" binding:"required"`
-	ConfirmPassword string                `form:"confirm_password" binding:"required,eqfield=Password"`
-	FileKTP         *multipart.FileHeader `form:"file_ktp" binding:"required"`
+	Email           string `form:"email" binding:"required,email"`
+	Name            string `form:"name" binding:"required"`
+	Password        string `form:"password" binding:"required"`
+	Phone           string `form:"phone" binding:"required"`
+	ConfirmPassword string `form:"confirm_password" binding:"required,eqfield=Password"`
+	NIK             string `form:"nik" binding:"required"`
+	Alamat          string `form:"alamat" binding:"required"`
+	// FileKTP         *multipart.FileHeader `form:"file_ktp" binding:"required"`
 }
 
 type UserLogin struct {
@@ -63,6 +64,8 @@ type UserLogin struct {
 }
 
 type UserUpdate struct {
-	Name  string `form:"name" binding:"required"`
-	Phone string `form:"phone" binding:"required"`
+	Name   string `form:"name" binding:"required"`
+	Phone  string `form:"phone" binding:"required"`
+	NIK    string `form:"nik" binding:"required"`
+	Alamat string `form:"alamat" binding:"required"`
 }
