@@ -20,7 +20,12 @@ func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string
 
 	// Query GORM untuk mengambil data beserta relasi
 	err := p.db.Preload("SubGrounds.Kavlings", func(db *gorm.DB) *gorm.DB {
-		return db.Order("kolom ASC")
+		// Menambahkan join ke tabel reservasis dan invoice_reservasis
+		return db.Joins("LEFT JOIN reservasis ON reservasis.kavling_id = kavlings.id").
+			Joins("LEFT JOIN invoice_reservasis ON invoice_reservasis.id = reservasis.invoice_reservasi_id").
+			Where("invoice_reservasis.tanggal_kedatangan <= ?", req.TanggalKepulangan).
+			Where("invoice_reservasis.tanggal_kepulangan >= ?", req.TanggalKedatangan).
+			Order("kavlings.kolom ASC")
 	}).Find(&grounds).Error
 	if err != nil {
 		return nil, err
