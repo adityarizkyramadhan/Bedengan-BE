@@ -98,16 +98,6 @@ func (i *InvoiceReservasi) Create(userID string, inputInvoiceReservasi *model.In
 		}
 	}
 
-	// Set is_available menjadi false
-	for _, r := range inputInvoiceReservasi.Reservasi {
-		if r.KavlingID != nil {
-			if err := tx.Model(&model.Kavling{}).Where("id = ?", *r.KavlingID).Update("is_available", false).Error; err != nil {
-				tx.Rollback()
-				return nil, err
-			}
-		}
-	}
-
 	// Lama hari = tanggal kepulangan - tanggal kedatangan
 	lamaHari, err := inputInvoiceReservasi.CalculateLamaHari()
 	if err != nil {

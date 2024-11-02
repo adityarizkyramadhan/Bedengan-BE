@@ -42,6 +42,9 @@ func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string
 			// Group by baris
 			kavlingByBaris := map[int][]map[string]interface{}{}
 			for _, kavling := range subGround.Kavlings {
+				// Tentukan apakah kavling aktif berdasarkan invoice reservasi
+				isAktif := len(kavling.Reservasi) == 0
+
 				kavlingData := map[string]interface{}{
 					"kolom":         kavling.Kolom,
 					"baris":         kavling.Baris,
@@ -50,7 +53,7 @@ func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string
 					"nomorGround":   subGround.Nama,
 					"nomorKavling":  kavling.Nama,
 					"harga":         kavling.Harga,
-					"isAvailable":   kavling.IsAvailable,
+					"isAvailable":   isAktif, // Ubah sesuai status aktif
 					"sub_ground_id": kavling.SubGroundID,
 					"groud_id":      ground.ID,
 				}
