@@ -45,7 +45,7 @@ type PerlengkapanInput struct {
 	Jenis     string                `form:"jenis" binding:"required"`
 	Harga     int                   `form:"harga" binding:"required"`
 	Stok      int                   `form:"stok" binding:"required"`
-	Image     *multipart.FileHeader `form:"image" binding:"required"`
+	Image     *multipart.FileHeader `form:"image"`
 }
 
 func (p *PerlengkapanInput) ToPerlengkapan() *Perlengkapan {
