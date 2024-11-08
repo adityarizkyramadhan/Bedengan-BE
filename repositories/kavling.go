@@ -18,11 +18,6 @@ func NewKavlingRepository(db *gorm.DB) *Kavling {
 	return &Kavling{db}
 }
 
-import (
-	"time"
-	"fmt"
-)
-
 func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string][][]map[string]interface{}, error) {
 	var grounds []model.Ground
 
@@ -71,7 +66,7 @@ func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string
 				if !tanggalKedatangan.IsZero() && !tanggalKepulangan.IsZero() {
 					// Periksa setiap reservasi untuk rentang tanggal
 					for _, reservasi := range kavling.Reservasi {
-						if (tanggalKedatangan.Before(reservasi.InvoiceReservasi.TanggalKepulangan) && tanggalKepulangan.After(reservasi.InvoiceReservasi.TanggalKedatangan)) {
+						if tanggalKedatangan.Before(reservasi.InvoiceReservasi.TanggalKepulangan) && tanggalKepulangan.After(reservasi.InvoiceReservasi.TanggalKedatangan) {
 							isAktif = true
 							break
 						}
