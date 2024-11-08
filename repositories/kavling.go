@@ -32,13 +32,7 @@ func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string
 		if err != nil {
 			return nil, fmt.Errorf("error parsing TanggalKepulangan: %v", err)
 		}
-		err = p.db.Preload("SubGrounds.Kavlings.Reservasi.InvoiceReservasi", func(db *gorm.DB) *gorm.DB {
-			// Menambahkan join ke tabel reservasis dan invoice_reservasis
-			db = db.Joins("LEFT JOIN reservasis ON reservasis.kavling_id = kavlings.id").
-				Joins("LEFT JOIN invoice_reservasis ON invoice_reservasis.id = reservasi.invoice_reservasi_id")
-			// Order by kolom
-			return db.Order("kavlings.kolom ASC")
-		}).Find(&grounds).Error
+		err = p.db.Preload("SubGrounds.Kavlings.Reservasi.InvoiceReservasi").Find(&grounds).Error
 		if err != nil {
 			return nil, err
 		}
