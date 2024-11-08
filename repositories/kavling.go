@@ -18,14 +18,19 @@ func NewKavlingRepository(db *gorm.DB) *Kavling {
 	return &Kavling{db}
 }
 
+import (
+	"time"
+	"fmt"
+)
+
 func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string][][]map[string]interface{}, error) {
 	var grounds []model.Ground
 
 	// Query GORM untuk mengambil data beserta relasi
-	err := p.db.Preload("SubGrounds.Kavlings", func(db *gorm.DB) *gorm.DB {
+	err := p.db.Preload("SubGrounds.Kavlings.Reservasi.InvoiceReservasi", func(db *gorm.DB) *gorm.DB {
 		// Menambahkan join ke tabel reservasis dan invoice_reservasis
 		db = db.Joins("LEFT JOIN reservasis ON reservasis.kavling_id = kavlings.id").
-			Joins("LEFT JOIN invoice_reservasis ON invoice_reservasis.id = reservasis.invoice_reservasi_id")
+			Joins("LEFT JOIN invoice_reservasis ON invoice_reservasis.id = reservasi.invoice_reservasi_id")
 		// Order by kolom
 		return db.Order("kavlings.kolom ASC")
 	}).Find(&grounds).Error
@@ -35,13 +40,19 @@ func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string
 		return nil, err
 	}
 
-	tanggalKedatangan, err := time.Parse("2006-01-02", req.TanggalKedatangan)
-	if err != nil {
-		return nil, fmt.Errorf("error parsing TanggalKedatangan: %v", err)
+	// Parsing TanggalKedatangan dan TanggalKepulangan jika ada
+	var tanggalKedatangan, tanggalKepulangan time.Time
+	if req.TanggalKedatangan != "" {
+		tanggalKedatangan, err = time.Parse("2006-01-02", req.TanggalKedatangan)
+		if err != nil {
+			return nil, fmt.Errorf("error parsing TanggalKedatangan: %v", err)
+		}
 	}
-	tanggalKepulangan, err := time.Parse("2006-01-02", req.TanggalKepulangan)
-	if err != nil {
-		return nil, fmt.Errorf("error parsing TanggalKepulangan: %v", err)
+	if req.TanggalKepulangan != "" {
+		tanggalKepulangan, err = time.Parse("2006-01-02", req.TanggalKepulangan)
+		if err != nil {
+			return nil, fmt.Errorf("error parsing TanggalKepulangan: %v", err)
+		}
 	}
 
 	response := make(map[string]map[string][][]map[string]interface{})
@@ -55,14 +66,15 @@ func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string
 			// Group by baris
 			kavlingByBaris := map[int][]map[string]interface{}{}
 			for _, kavling := range subGround.Kavlings {
-				// Tentukan apakah kavling aktif berdasarkan invoice reservasi
 				isAktif := false
-				for _, reservasi := range kavling.Reservasi {
-					// Cek apakah tanggal kedatangan dan kepulangan berada dalam periode reservasi
-					if (tanggalKedatangan.After(reservasi.InvoiceReservasi.TanggalKedatangan) && tanggalKedatangan.Before(reservasi.InvoiceReservasi.TanggalKepulangan)) ||
-						(tanggalKepulangan.After(reservasi.InvoiceReservasi.TanggalKedatangan) && tanggalKepulangan.Before(reservasi.InvoiceReservasi.TanggalKepulangan)) {
-						isAktif = true
-						break
+
+				if !tanggalKedatangan.IsZero() && !tanggalKepulangan.IsZero() {
+					// Periksa setiap reservasi untuk rentang tanggal
+					for _, reservasi := range kavling.Reservasi {
+						if (tanggalKedatangan.Before(reservasi.InvoiceReservasi.TanggalKepulangan) && tanggalKepulangan.After(reservasi.InvoiceReservasi.TanggalKedatangan)) {
+							isAktif = true
+							break
+						}
 					}
 				}
 
@@ -74,9 +86,9 @@ func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string
 					"nomorGround":   subGround.Nama,
 					"nomorKavling":  kavling.Nama,
 					"harga":         kavling.Harga,
-					"isAvailable":   isAktif, // Ubah sesuai status aktif
+					"isAvailable":   !isAktif, // isAvailable akan true jika isAktif false
 					"sub_ground_id": kavling.SubGroundID,
-					"groud_id":      ground.ID,
+					"ground_id":     ground.ID,
 				}
 				kavlingByBaris[kavling.Baris] = append(kavlingByBaris[kavling.Baris], kavlingData)
 			}
