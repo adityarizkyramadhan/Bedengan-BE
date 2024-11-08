@@ -23,16 +23,17 @@ func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string
 		// Menambahkan join ke tabel reservasis dan invoice_reservasis
 		db = db.Joins("LEFT JOIN reservasis ON reservasis.kavling_id = kavlings.id").
 			Joins("LEFT JOIN invoice_reservasis ON invoice_reservasis.id = reservasis.invoice_reservasi_id")
-
-		// Menambahkan kondisi Where untuk tanggal jika ada
+		// Menambahkan kondisi Where untuk tanggal jika ada data tanggal yang diberikan
 		if req.TanggalKedatangan != "" && req.TanggalKepulangan != "" {
-			db = db.Where("invoice_reservasis.tanggal_kedatangan <= ?", req.TanggalKepulangan).
-				Where("invoice_reservasis.tanggal_kepulangan >= ?", req.TanggalKedatangan)
+			db = db.Where(
+				"(invoice_reservasis.tanggal_kedatangan IS NULL OR invoice_reservasis.tanggal_kedatangan <= ?) AND (invoice_reservasis.tanggal_kepulangan IS NULL OR invoice_reservasis.tanggal_kepulangan >= ?)",
+				req.TanggalKepulangan, req.TanggalKedatangan,
+			)
 		}
-
 		// Order by kolom
 		return db.Order("kavlings.kolom ASC")
 	}).Find(&grounds).Error
+
 	if err != nil {
 		return nil, err
 	}
