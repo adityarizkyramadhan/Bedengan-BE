@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"fmt"
+
 	"github.com/adityarizkyramadhan/template-go-mvc/model"
 	"github.com/adityarizkyramadhan/template-go-mvc/model/dto"
 	"github.com/adityarizkyramadhan/template-go-mvc/utils"
@@ -16,29 +18,40 @@ func NewKavlingRepository(db *gorm.DB) *Kavling {
 }
 
 func (p *Kavling) FindAll(req *dto.FindAllKavlingRequest) (map[string]map[string][][]map[string]interface{}, error) {
+	var reservedGrounds []model.Ground
+	var unreservedGrounds []model.Ground
 	var grounds []model.Ground
 
-	// Query GORM untuk mengambil data beserta relasi
-	err := p.db.Preload("SubGrounds.Kavlings", func(db *gorm.DB) *gorm.DB {
-		// Menambahkan join ke tabel reservasis dan invoice_reservasis
-		db = db.Joins("LEFT JOIN reservasis ON reservasis.kavling_id = kavlings.id").
-			Joins("LEFT JOIN invoice_reservasis ON invoice_reservasis.id = reservasis.invoice_reservasi_id")
-		// Menambahkan kondisi Where untuk tanggal jika ada data tanggal yang diberikan
+	// Query pertama: untuk kavlings yang sudah direservasi
+	err1 := p.db.Preload("SubGrounds.Kavlings", func(db *gorm.DB) *gorm.DB {
+		db = db.Joins("JOIN reservasis ON reservasis.kavling_id = kavlings.id").
+			Joins("JOIN invoice_reservasis ON invoice_reservasis.id = reservasis.invoice_reservasi_id")
+
 		if req.TanggalKedatangan != "" && req.TanggalKepulangan != "" {
 			db = db.Where(
-				"(invoice_reservasis.tanggal_kedatangan IS NULL OR invoice_reservasis.tanggal_kedatangan <= ?) AND (invoice_reservasis.tanggal_kepulangan IS NULL OR invoice_reservasis.tanggal_kepulangan >= ?)",
+				"invoice_reservasis.tanggal_kedatangan <= ? AND invoice_reservasis.tanggal_kepulangan >= ?",
 				req.TanggalKepulangan, req.TanggalKedatangan,
 			)
 		}
-		// Order by kolom
-		return db.Order("kavlings.kolom ASC")
-	}).Find(&grounds).Error
 
-	if err != nil {
-		return nil, err
-	}
+		return db.Order("kavlings.kolom ASC")
+	}).Find(&reservedGrounds).Error
+
+	// Query kedua: untuk kavlings yang belum direservasi
+	err2 := p.db.Preload("SubGrounds.Kavlings", func(db *gorm.DB) *gorm.DB {
+		db = db.Joins("LEFT JOIN reservasis ON reservasis.kavling_id = kavlings.id").
+			Where("reservasis.id IS NULL")
+
+		return db.Order("kavlings.kolom ASC")
+	}).Find(&unreservedGrounds).Error
 
 	response := make(map[string]map[string][][]map[string]interface{})
+	// Cek jika ada error pada query
+	if err1 != nil || err2 != nil {
+		return response, fmt.Errorf("error loading grounds: %v %v", err1, err2)
+	}
+
+	grounds = append(reservedGrounds, unreservedGrounds...)
 
 	for _, ground := range grounds {
 		subGroundMap := make(map[string][][]map[string]interface{})
